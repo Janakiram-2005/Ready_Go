@@ -14,7 +14,21 @@ const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 // Initialize app
 const app = express();
-app.use(cors());
+
+// --- MODIFIED: Explicit CORS Configuration to trust all origins ---
+// This allows any domain to make requests, which is what you asked for.
+app.use(cors({
+    origin: function (origin, callback) {
+        // This dynamically allows any origin that sends a request.
+        // This is insecure but will allow requests from any site.
+        callback(null, true); 
+    },
+    credentials: true, // Allow cookies/authorization headers
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Allow all methods
+    allowedHeaders: ['Content-Type', 'Authorization'] // Allow specific headers
+}));
+// --- END OF CORS MODIFICATION ---
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -926,8 +940,8 @@ app.post('/documents/upload', verifyToken, uploadUserDocs.fields([{ name: 'licen
             }
             // Delete old file from Cloudinary if it exists
             if (user.addressFile && (user.addressFile.includes('cloudinary') || user.addressFile.startsWith('readygo-images/'))) {
-                const publicId = path.parse(user.addressFile).name;
-                try { await cloudinary.uploader.destroy(`readygo-images/${publicId}`); } catch (e) { console.error("Cloudinary delete old address error", e)}
+                 const publicId = path.parse(user.addressFile).name;
+                 try { await cloudinary.uploader.destroy(`readygo-images/${publicId}`); } catch (e) { console.error("Cloudinary delete old address error", e)}
             }
             update.addressFile = req.files['address'][0].path; // This is now a Cloudinary URL
             update.addressStatus = 'Pending Review';
@@ -1102,8 +1116,8 @@ app.put('/owner/vehicles/:id', verifyToken, verifyOwner, uploadVehicleImage.sing
         if (req.file) {
             // Delete old image from Cloudinary if it exists
             if (vehicle.imageUrl && (vehicle.imageUrl.includes('cloudinary') || vehicle.imageUrl.startsWith('readygo-images/'))) {
-                const publicId = path.parse(vehicle.imageUrl).name;
-                try { await cloudinary.uploader.destroy(`readygo-images/${publicId}`); } catch (e) { console.error("Cloudinary delete old vehicle image error:", e); }
+                 const publicId = path.parse(vehicle.imageUrl).name;
+                 try { await cloudinary.uploader.destroy(`readygo-images/${publicId}`); } catch (e) { console.error("Cloudinary delete old vehicle image error:", e); }
             }
             updateData.imageUrl = req.file.path; // This is now a Cloudinary URL
         }
@@ -1552,11 +1566,11 @@ app.delete('/admin/users/:id', verifyToken, verifyAdmin, async (req, res) => {
         if (user.role === 'Owner') {
             const vehicles = await VehicleModel.find({ ownerId: userId });
             for (const v of vehicles) {
-                if (v.imageUrl && (v.imageUrl.includes('cloudinary') || v.imageUrl.startsWith('readygo-images/'))) {
-                    const publicId = path.parse(v.imageUrl).name;
-                    try { await cloudinary.uploader.destroy(`readygo-images/${publicId}`); } catch (e) { console.error("Cleanup vehicle image error:", e); }
-                }
-                await BookingModel.updateMany(
+                 if (v.imageUrl && (v.imageUrl.includes('cloudinary') || v.imageUrl.startsWith('readygo-images/'))) {
+                     const publicId = path.parse(v.imageUrl).name;
+                     try { await cloudinary.uploader.destroy(`readygo-images/${publicId}`); } catch (e) { console.error("Cleanup vehicle image error:", e); }
+                 }
+                 await BookingModel.updateMany(
                      { vehicleId: v._id, status: { $in: ['Pending', 'Confirmed', 'Upcoming'] } },
                      { $set: { status: 'Cancelled' } }
                  );
@@ -1956,3 +1970,4 @@ app.use((err, req, res, next) => {
     console.error("💥 Unhandled Error:", err.stack || err);
     res.status(500).json({ message: 'Something went wrong on the server!' });
 });
+
