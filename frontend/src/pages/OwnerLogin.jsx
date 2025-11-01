@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
-import { User, Mail, KeyRound, ArrowLeft, Loader2 } from 'lucide-react'; // Import Loader2
+// Import Link and useNavigate for SPA navigation
+import { Link, useNavigate } from 'react-router-dom';
+import { Car, Mail, KeyRound, ArrowLeft, Loader2 } from 'lucide-react'; // Added Loader2
 
 // --- MODIFIED: API URL ---
 // This will use your Render URL in production and localhost in development
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3030';
 // --- Embedded CSS with Responsive Design ---
-const CustomerLoginStyles = () => (
+const OwnerLoginStyles = () => (
     <style>{`
         /* Import Google Font */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
 
-        /* Base styles */
+        /* Base styles for the entire page */
         html, body, #root {
             height: 100%;
             margin: 0;
@@ -19,103 +20,96 @@ const CustomerLoginStyles = () => (
             font-family: 'Inter', sans-serif;
         }
 
-        :root { /* CSS Variables */
-         --orange-500: #f97316; --orange-600: #ea580c;
-         --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
-         --gray-600: #4b5563; --gray-700: #374151; --white: #ffffff;
-         --red-500: #ef4444;
-         --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-        }
-
-        .customer-login-page-container {
+        /* This container correctly centers the card in the viewport */
+        .owner-login-page-container {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100%;
+            justify-content: center; /* Horizontally center */
+            align-items: center;    /* Vertically center */
+            width: 100%;
+            min-height: 100%; /* Use min-height to ensure it fills viewport */
             padding: 1rem;
             box-sizing: border-box;
-            background: linear-gradient(135deg, var(--gray-50) 0%, #e2e8f0 100%);
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); /* Light green gradient */
         }
 
-        .customer-login-card {
-            background-color: var(--white);
+        /* The main login card */
+        .owner-login-card {
+            background-color: #ffffff;
             padding: 2.5rem;
             border-radius: 1rem;
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
             max-width: 450px;
             width: 100%;
             animation: fadeIn 0.5s ease-out;
             text-align: center;
         }
 
-        .customer-login-card .logo {
+        .owner-login-card .logo {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.75rem;
             font-size: 2.25rem;
             font-weight: 800;
-            color: var(--orange-500);
+            color: #047857; /* Owner primary color (Green) */
             margin-bottom: 0.5rem;
         }
 
-        .customer-login-card .tagline {
+        .owner-login-card .tagline {
             font-size: 1.125rem;
-            color: var(--gray-600);
+            color: #4b5563; /* gray-600 */
             margin-bottom: 2.5rem;
         }
 
-        .customer-login-card .form-group {
+        .owner-login-card .form-group {
             margin-bottom: 1.5rem;
             text-align: left;
         }
 
-        .customer-login-card .form-label {
+        .owner-login-card .form-label {
             display: block;
             font-weight: 500;
-            color: var(--gray-700);
+            color: #374151; /* gray-700 */
             margin-bottom: 0.5rem;
         }
 
-        .customer-login-card .input-wrapper {
+        .owner-login-card .input-wrapper {
             position: relative;
         }
 
-        .customer-login-card .form-input {
+        .owner-login-card .form-input {
             width: 100%;
-            padding: 0.75rem 1rem 0.75rem 2.75rem;
-            border: 1px solid var(--gray-200);
+            padding: 0.75rem 1rem 0.75rem 2.75rem; /* Padding for icon */
+            border: 1px solid #e5e7eb; /* gray-200 */
             border-radius: 0.5rem;
             font-size: 1rem;
             transition: box-shadow 0.2s;
             box-sizing: border-box;
         }
 
-        .customer-login-card .form-input:focus {
+        .owner-login-card .form-input:focus {
             outline: none;
-            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.3); /* Orange focus */
+            box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.3); /* Green focus color */
         }
-        
-        .customer-login-card .form-input::placeholder {
+
+        .owner-login-card .form-input::placeholder {
             color: #9ca3af;
         }
 
-        .customer-login-card .input-icon {
+        .owner-login-card .input-icon {
             position: absolute;
             left: 1rem;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--gray-600);
+            color: #4b5563; /* gray-600 */
+            pointer-events: none; /* Icon is not interactive */
         }
 
-        .customer-login-card .form-actions {
+        .owner-login-card .form-actions {
             margin-top: 2rem;
-            display: flex; /* Added for button spacing */
-            flex-direction: column;
-            gap: 1rem;
         }
 
-        .customer-login-card .btn {
+        .owner-login-card .btn {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -130,20 +124,8 @@ const CustomerLoginStyles = () => (
             width: 100%;
             transition: background-color 0.2s ease, transform 0.2s ease;
         }
-        
-        .customer-login-card .btn-customer {
-            background-color: var(--orange-500);
-            color: var(--white);
-        }
 
-        .customer-login-card .btn-customer:hover:not(:disabled) {
-            background-color: var(--orange-600);
-            transform: translateY(-2px);
-        }
-
-        /* --- REMOVED .btn-secondary styles as they are no longer used --- */
-        
-        /* Added spinner animation */
+         /* Added spinner animation */
         .spinner {
             animation: spin 1s linear infinite;
         }
@@ -152,33 +134,45 @@ const CustomerLoginStyles = () => (
             to { transform: rotate(360deg); }
         }
 
-        .customer-login-card .btn:disabled {
-             background-color: var(--gray-200);
+        .owner-login-card .btn-owner {
+            background-color: #047857; /* owner-primary */
+            color: #ffffff;
+        }
+
+        .owner-login-card .btn-owner:hover:not(:disabled) { /* Don't apply hover effect when disabled */
+            background-color: #065f46; /* owner-secondary */
+            transform: translateY(-2px);
+        }
+
+        .owner-login-card .btn:disabled { /* Style for disabled button */
+             background-color: #d1d5db; /* gray-300 */
              cursor: not-allowed;
              opacity: 0.7;
         }
 
-
-        .customer-login-card .form-links {
+        /* --- MODIFIED: Responsive Footer Links --- */
+        .owner-login-card .form-links {
             margin-top: 1.5rem;
             display: flex;
-            justify-content: center; /* Center the links */
-            gap: 1.5rem; /* Add space between links */
+            justify-content: center; /* Center links horizontally */
+            gap: 1.5rem; /* Space between links */
             font-size: 0.875rem;
+            flex-wrap: wrap; /* Allow links to wrap on small-medium screens */
         }
 
-        .customer-login-card .form-links a {
-            color: var(--gray-600);
+        .owner-login-card .form-links a { /* Style Links */
+            color: #4b5563;
             text-decoration: none;
             font-weight: 500;
         }
-        
-        .customer-login-card .form-links a:hover {
+
+        .owner-login-card .form-links a:hover {
             text-decoration: underline;
-            color: var(--gray-800);
+            color: #1f2937;
         }
-        
-        .customer-login-card .error-message {
+        /* --- END MODIFICATION --- */
+
+        .owner-login-card .error-message {
             background-color: #fee2e2;
             color: #b91c1c;
             padding: 0.75rem;
@@ -193,40 +187,41 @@ const CustomerLoginStyles = () => (
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Responsive adjustments */
         @media (max-width: 480px) {
-            .customer-login-page-container {
+            .owner-login-page-container {
                 padding: 1rem;
-                align-items: flex-start;
+                align-items: flex-start; /* Align card to top on small screens */
                 padding-top: 5vh;
             }
-            .customer-login-card {
+            .owner-login-card {
                 padding: 2rem 1.5rem;
             }
-            .customer-login-card .logo {
+            .owner-login-card .logo {
                 font-size: 2rem;
             }
             
-            /* --- MODIFICATION: Make footer links stack on mobile --- */
-            .customer-login-card .form-links {
+            /* --- NEW: Stack footer links on mobile --- */
+            .owner-login-card .form-links {
                 flex-direction: column;
-                gap: 1.25rem;
-                align-items: center; /* Center-align the stacked links */
+                gap: 0.75rem;
+                align-items: center;
             }
         }
     `}</style>
 );
 
-function CustomerLogin() {
+function OwnerLogin() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [isLoading, setIsLoading] = useState(false); // --- ADDED ---
-    const navigate = useNavigate(); // --- ADDED ---
+    const [isLoading, setIsLoading] = useState(false); // Added loading state
+    const navigate = useNavigate(); // Added useNavigate hook
 
     const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
-        setIsLoading(true); // --- ADDED ---
+        setIsLoading(true); // Set loading true
         try {
             // --- MODIFIED: Use API_BASE_URL variable ---
             const response = await fetch(`${API_BASE_URL}/login`, {
@@ -238,30 +233,31 @@ function CustomerLogin() {
             if (!response.ok) {
                 throw new Error(data.message || 'Login failed.');
             }
-            if (data.user.role !== 'Customer') {
-                 throw new Error('Access denied. Please use the correct login page.');
+            if (data.user.role !== 'Owner') {
+                 throw new Error('Access denied. Please use the correct login page for Owners.');
             }
-            // On successful login, store token and user info, then redirect
+
+            // --- Store token and user data ---
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
-            
-            // --- MODIFIED: Use navigate for SPA redirect ---
-            navigate('/customer-dashboard'); 
+
+            // --- Use navigate for redirection ---
+            navigate('/owner-dashboard');
 
         } catch (err) {
             setError(err.message);
         } finally {
-            setIsLoading(false); // --- ADDED ---
+            setIsLoading(false); // Set loading false regardless of outcome
         }
     };
 
     return (
         <>
-            <CustomerLoginStyles />
-            <div className="customer-login-page-container">
-                <div className="customer-login-card">
-                    <h1 className="logo"><User size={36} />Customer Login</h1>
-                    <p className="tagline">Sign in to find your next ride.</p>
+            <OwnerLoginStyles />
+            <div className="owner-login-page-container">
+                <div className="owner-login-card">
+                    <h1 className="logo"><Car size={36} />Owner Login</h1>
+                    <p className="tagline">Manage your vehicles and earnings.</p>
                     {error && <div className="error-message">{error}</div>}
                     <form onSubmit={handleLogin}>
                         <div className="form-group">
@@ -274,7 +270,7 @@ function CustomerLogin() {
                                     value={email}
                                     onChange={e => setEmail(e.target.value)}
                                     className="form-input"
-                                    placeholder="Enter your email"
+                                    placeholder="you@example.com"
                                     required
                                 />
                             </div>
@@ -295,18 +291,17 @@ function CustomerLogin() {
                             </div>
                         </div>
                         <div className="form-actions">
-                            {/* --- MODIFIED: Added loading state to button --- */}
-                            <button type="submit" className="btn btn-customer" disabled={isLoading}>
+                            {/* Updated button with loading state */}
+                            <button type="submit" className="btn btn-owner" disabled={isLoading}>
                                 {isLoading ? <Loader2 className="spinner" /> : 'Login'}
                             </button>
-                            {/* --- MODIFIED: Changed className to btn-customer --- */}
-                            <Link to="/customer-register" className="btn btn-customer">Register</Link>
                         </div>
                     </form>
 
                     <div className="form-links">
-                        <Link to="/owner-login">Login as Owner</Link>
-                        <Link to="/"> <ArrowLeft size={16} /> Back to Home</Link>
+                        <Link to="/owner-register">Don't have an account? Register</Link>
+                        <Link to="/customer-login">Login as a Customer</Link>
+                        <Link to="/"> <ArrowLeft size={16} /> Back to Home</Link> {/* Added Back link */}
                     </div>
                 </div>
             </div>
@@ -314,5 +309,4 @@ function CustomerLogin() {
     );
 }
 
-export default CustomerLogin;
-
+export default OwnerLogin;
