@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { UserPlus, Mail, Phone, Home, KeyRound, ArrowLeft } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { UserPlus, Mail, KeyRound, ArrowLeft, Loader2 } from 'lucide-react'; // Import Loader2
+
+// --- ADDED THIS LINE (The main fix) ---
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3030';
 
 // --- Embedded CSS with Responsive Design ---
 const OwnerRegisterStyles = () => (
@@ -17,11 +20,11 @@ const OwnerRegisterStyles = () => (
         }
 
         :root { /* Define CSS Variables */
-          --owner-primary: #047857; --owner-secondary: #065f46;
-          --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
-          --gray-600: #4b5563; --gray-700: #374151; --white: #ffffff;
-          --red-500: #ef4444; --green-500: #22c55e;
-          --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+         --owner-primary: #047857; --owner-secondary: #065f46;
+         --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
+         --gray-600: #4b5563; --gray-700: #374151; --white: #ffffff;
+         --red-500: #ef4444; --green-500: #22c55e;
+         --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
         }
 
         .owner-register-page-container {
@@ -36,10 +39,10 @@ const OwnerRegisterStyles = () => (
 
         .owner-register-card {
             background-color: var(--white);
-            padding: 2rem; /* Slightly less padding for register */
+            padding: 2rem;
             border-radius: 1rem;
             box-shadow: var(--shadow-lg);
-            max-width: 500px; /* Slightly wider for more fields */
+            max-width: 500px;
             width: 100%;
             animation: fadeIn 0.5s ease-out;
             text-align: center;
@@ -50,20 +53,20 @@ const OwnerRegisterStyles = () => (
             align-items: center;
             justify-content: center;
             gap: 0.75rem;
-            font-size: 2rem; /* Adjusted size */
+            font-size: 2rem;
             font-weight: 800;
             color: var(--owner-primary);
             margin-bottom: 0.5rem;
         }
 
         .owner-register-card .tagline {
-            font-size: 1.1rem; /* Adjusted size */
+            font-size: 1.1rem;
             color: var(--gray-600);
             margin-bottom: 2rem;
         }
 
         .owner-register-card .form-group {
-            margin-bottom: 1.25rem; /* Adjusted spacing */
+            margin-bottom: 1.25rem;
             text-align: left;
         }
 
@@ -80,7 +83,7 @@ const OwnerRegisterStyles = () => (
 
         .owner-register-card .form-input {
             width: 100%;
-            padding: 0.7rem 1rem 0.7rem 2.75rem; /* Adjusted padding */
+            padding: 0.7rem 1rem 0.7rem 2.75rem;
             border: 1px solid var(--gray-200);
             border-radius: 0.5rem;
             font-size: 1rem;
@@ -106,7 +109,7 @@ const OwnerRegisterStyles = () => (
         }
 
         .owner-register-card .form-actions {
-            margin-top: 1.5rem; /* Adjusted spacing */
+            margin-top: 1.5rem;
         }
 
         .owner-register-card .btn {
@@ -114,9 +117,9 @@ const OwnerRegisterStyles = () => (
             align-items: center;
             justify-content: center;
             gap: 0.75rem;
-            padding: 0.9rem; /* Adjusted padding */
+            padding: 0.9rem;
             border-radius: 0.5rem;
-            font-size: 1.1rem; /* Adjusted size */
+            font-size: 1.1rem;
             font-weight: 700;
             text-decoration: none;
             border: none;
@@ -130,9 +133,15 @@ const OwnerRegisterStyles = () => (
             color: var(--white);
         }
 
-        .owner-register-card .btn-owner:hover {
+        .owner-register-card .btn-owner:hover:not(:disabled) {
             background-color: var(--owner-secondary);
             transform: translateY(-2px);
+        }
+
+        .owner-register-card .btn:disabled {
+            background-color: var(--gray-200);
+            cursor: not-allowed;
+            opacity: 0.7;
         }
 
         .owner-register-card .back-link {
@@ -156,6 +165,15 @@ const OwnerRegisterStyles = () => (
             text-align: center;
             margin-bottom: 1.5rem;
             animation: fadeIn 0.3s;
+        }
+
+        /* Added spinner animation */
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         @keyframes fadeIn {
@@ -182,31 +200,36 @@ const OwnerRegisterStyles = () => (
 function OwnerRegister() {
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState(''); // Added phone state
-    const [address, setAddress] = useState(''); // Added address state
+    // --- REMOVED unused phone and address states ---
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false); // --- ADDED loading state ---
+    const navigate = useNavigate(); // --- ADDED navigate ---
     const role = 'Owner';
 
     const handleRegister = async (e) => {
         e.preventDefault();
         setError('');
+        setIsLoading(true); // --- SET loading to true ---
         try {
-            // Include fullName in the request body
-            const response = await fetch('http://localhost:3030/register', { // Using Port 3001
+            // --- MODIFIED: Use API_BASE_URL variable ---
+            const response = await fetch(`${API_BASE_URL}/register`, { 
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ fullName, email, password, role }), // Sending required fields
+                // --- MODIFIED: Body now matches backend ---
+                body: JSON.stringify({ fullName, email, password, role }),
             });
             const data = await response.json();
             if (!response.ok) {
                 throw new Error(data.message || 'Registration failed.');
             }
             alert('Registration successful! Please log in.');
-            // Use react-router Link's behavior (handled by App.jsx) or redirect
-            window.location.href = '/owner-login'; // Redirect to login after successful registration
+            // --- MODIFIED: Use navigate for SPA redirect ---
+            navigate('/owner-login');
         } catch (err) {
             setError(err.message);
+        } finally {
+            setIsLoading(false); // --- SET loading to false ---
         }
     };
 
@@ -228,35 +251,26 @@ function OwnerRegister() {
                         </div>
                         <div className="form-group">
                             <label className="form-label" htmlFor="email">Email Address</label>
-                             <div className="input-wrapper">
+                            <div className="input-wrapper">
                                 <Mail size={18} className="input-icon" />
                                 <input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} className="form-input" placeholder="you@example.com" required />
                             </div>
                         </div>
-                        {/* Note: Phone and Address are not sent to the current backend /register endpoint */}
-                        <div className="form-group">
-                            <label className="form-label" htmlFor="phone">Phone Number</label>
-                             <div className="input-wrapper">
-                                <Phone size={18} className="input-icon" />
-                                <input id="phone" type="tel" value={phone} onChange={e => setPhone(e.target.value)} className="form-input" placeholder="Your phone number" required />
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label className="form-label" htmlFor="address">Address</label>
-                             <div className="input-wrapper">
-                                <Home size={18} className="input-icon" />
-                                <input id="address" type="text" value={address} onChange={e => setAddress(e.target.value)} className="form-input" placeholder="Your address" required />
-                            </div>
-                        </div>
+
+                        {/* --- REMOVED Phone and Address form groups --- */}
+
                         <div className="form-group">
                             <label className="form-label" htmlFor="password">Create Password</label>
-                             <div className="input-wrapper">
+                            <div className="input-wrapper">
                                 <KeyRound size={18} className="input-icon" />
                                 <input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} className="form-input" placeholder="••••••••" required />
                             </div>
                         </div>
                         <div className="form-actions">
-                            <button type="submit" className="btn btn-owner">Register</button>
+                            {/* --- MODIFIED: Added loading state to button --- */}
+                            <button type="submit" className="btn btn-owner" disabled={isLoading}>
+                                {isLoading ? <Loader2 className="spinner" /> : 'Register'}
+                            </button>
                         </div>
                     </form>
                     <Link to="/owner-login" className="back-link">

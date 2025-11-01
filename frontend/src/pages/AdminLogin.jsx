@@ -25,7 +25,7 @@ const AdminLoginStyles = () => (
         .admin-login-page-container {
             display: flex;
             justify-content: center; /* Horizontally center */
-            align-items: center;    /* Vertically center */
+            align-items: center;     /* Vertically center */
             width: 100%;
             min-height: 100vh;
             padding: 1rem;
@@ -80,7 +80,7 @@ const AdminLoginStyles = () => (
 
         .admin-login-card .form-input {
             width: 100%;
-            padding: 0.75rem 1rem 0.75rem 3rem; /* MODIFIED: Increased left padding */
+            padding: 0.75rem 1rem 0.75rem 3rem; 
             border: 1px solid #e5e7eb; /* gray-200 */
             border-radius: 0.5rem;
             font-size: 1rem;
@@ -99,7 +99,7 @@ const AdminLoginStyles = () => (
 
         .admin-login-card .input-icon {
             position: absolute;
-            left: 1rem; /* MODIFIED: Adjusted icon position slightly */
+            left: 1rem;
             top: 50%;
             transform: translateY(-50%);
             color: #4b5563; /* gray-600 */
@@ -156,9 +156,9 @@ const AdminLoginStyles = () => (
             border: none;
             cursor: pointer;
             font-weight: 500;
-            margin-top: 1.5rem;
             text-decoration: underline;
             font-size: 0.875rem;
+            padding: 0.25rem; /* Make it easier to tap */
         }
 
         .admin-login-card .back-link {
@@ -170,11 +170,11 @@ const AdminLoginStyles = () => (
             border: none;
             cursor: pointer;
             font-weight: 500;
-            margin-top: 1rem;
             text-decoration: none;
             font-size: 0.875rem;
         }
         
+        /* --- STYLING FOR MESSAGES --- */
         .admin-login-card .message {
             padding: 0.75rem;
             border-radius: 0.5rem;
@@ -191,6 +191,17 @@ const AdminLoginStyles = () => (
             color: #166534;
         }
 
+        /* --- NEW: STYLES FOR CARD FOOTER --- */
+        .admin-login-card-footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.25rem; /* Consistent spacing for links */
+            margin-top: 2rem; /* Space above the footer */
+            padding-top: 1.5rem; /* Space below the border */
+            border-top: 1px solid #e5e7eb; /* Visual separator */
+        }
+
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
@@ -201,7 +212,7 @@ const AdminLoginStyles = () => (
         @media (max-width: 480px) {
             .admin-login-page-container {
                 padding: 1rem;
-                align-items: flex-start;
+                align-items: flex-start; /* Good for keyboard */
                 padding-top: 5vh;
             }
             .admin-login-card {
@@ -209,6 +220,12 @@ const AdminLoginStyles = () => (
             }
             .admin-login-card .logo {
                 font-size: 2rem;
+            }
+            /* --- NEW: Reduce padding for footer on mobile --- */
+            .admin-login-card-footer {
+                margin-top: 1.5rem;
+                padding-top: 1.5rem;
+                gap: 1rem;
             }
         }
     `}</style>
@@ -436,13 +453,21 @@ function AdminLogin() {
                         </form>
                     )}
                     
-                    <button onClick={() => setIsRegister(!isRegister)} className="toggle-link">
-                        {isRegister ? 'Already have an account? Login' : 'Create new Admin Account'}
-                    </button>
-                    
-                    <Link to="/" className="back-link">
-                        <ArrowLeft size={16} /> Go Back to Home
-                    </Link>
+                    {/* --- MODIFIED: Links are now in a footer --- */}
+                    <div className="admin-login-card-footer">
+                        <button onClick={() => {
+                            setIsRegister(!isRegister);
+                            setMessage(''); // Clear messages on toggle
+                            setIsError(false);
+                        }} className="toggle-link">
+                            {isRegister ? 'Already have an account? Login' : 'Create new Admin Account'}
+                        </button>
+                        
+                        <Link to="/" className="back-link">
+                            <ArrowLeft size={16} /> Go Back to Home
+                        </Link>
+                    </div>
+
                 </div>
             </div>
         </>
@@ -450,4 +475,3 @@ function AdminLogin() {
 }
 
 export default AdminLogin;
-

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {
     ChartPie, UserCheck, Users, Wallet, AlertCircle, MessageSquare,
     Settings, LogOut, Check, X, Search, Loader2, Eye, Trash2, Send, Lock, XCircle,
-    Menu // Import Menu icon for toggle
+    Menu, AlertTriangle // Import Menu icon for toggle and AlertTriangle for confirm
 } from 'lucide-react';
 
 // --- API & Auth Helpers ---
@@ -96,7 +96,7 @@ const GlobalStyles = () => (
             width: 100%;
             height: 100vh;
         }
-       
+        
         /* --- Sidebar Styles --- */
         .dashboard__sidebar {
             width: var(--sidebar-width);
@@ -140,7 +140,7 @@ const GlobalStyles = () => (
             transition: opacity 0.2s ease, display 0s linear 0.3s;
             display: block;
         }
-       
+        
         .sidebar-toggle-btn {
             background: none;
             border: none;
@@ -225,7 +225,7 @@ const GlobalStyles = () => (
         .dashboard__main.sidebar-collapsed {
             margin-left: var(--sidebar-width-collapsed);
         }
-       
+        
         .mobile-header {
             display: none; /* Hidden on desktop */
             align-items: center;
@@ -246,7 +246,7 @@ const GlobalStyles = () => (
             background: none; border: none; cursor: pointer; padding: 0.5rem;
             display: none; /* Hidden by default, shown in media query */
         }
-       
+        
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -261,29 +261,29 @@ const GlobalStyles = () => (
         /* --- Mobile View --- */
         @media (max-width: 768px) {
             .dashboard__sidebar {
-                transform: translateX(-100%);
-                width: var(--sidebar-width); /* Full width when open */
+                 transform: translateX(-100%);
+                 width: var(--sidebar-width); /* Full width when open */
             }
             .dashboard__sidebar.open {
-                transform: translateX(0);
+                 transform: translateX(0);
             }
             .dashboard__sidebar.collapsed {
-                width: var(--sidebar-width);
-                transform: translateX(-100%);
+                 width: var(--sidebar-width);
+                 transform: translateX(-100%);
             }
              .dashboard__sidebar.collapsed.open {
-                transform: translateX(0);
-             }
+                 transform: translateX(0);
+            }
             .dashboard__sidebar.collapsed .nav-text,
             .dashboard__sidebar.collapsed .logo {
-                opacity: 1;
-                width: auto;
-                pointer-events: auto;
-                display: block;
+                 opacity: 1;
+                 width: auto;
+                 pointer-events: auto;
+                 display: block;
             }
             .dashboard__sidebar.collapsed .nav-item {
-                justify-content: flex-start;
-                padding: 0.75rem;
+                 justify-content: flex-start;
+                 padding: 0.75rem;
             }
             .dashboard__sidebar.collapsed .nav-item svg {
                  margin-right: 0.75rem;
@@ -292,41 +292,41 @@ const GlobalStyles = () => (
                  margin-left: 0.75rem;
             }
             .dashboard__sidebar.collapsed .sidebar-header {
-                justify-content: space-between;
-                padding: 0;
+                 justify-content: space-between;
+                 padding: 0;
             }
 
             .dashboard__main {
-                margin-left: 0;
-                padding: 1.5rem;
+                 margin-left: 0;
+                 padding: 1.5rem;
             }
             .dashboard__main.sidebar-collapsed {
                  margin-left: 0;
             }
-           
+            
             .mobile-header {
-                display: flex;
+                 display: flex;
                  margin: -1.5rem -1.5rem 1.5rem -1.5rem;
             }
             .sidebar-overlay.open {
-                display: block;
+                 display: block;
             }
             /* Hide desktop-only toggle */
             .sidebar-header .sidebar-toggle-btn {
-                display: none;
+                 display: none;
             }
             /* Show mobile toggle */
              .mobile-menu-btn {
-                display: block;
+                 display: block;
              }
         }
          /* Ensure toggle btn IS visible on desktop */
          @media (min-width: 769px) {
              .sidebar-header .sidebar-toggle-btn {
-                display: block;
+                 display: block;
              }
          }
-       
+        
         /* --- Other Styles --- */
         .main-title { font-size: 1.875rem; font-weight: 700; margin-bottom: 1.5rem; }
         .sub-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; }
@@ -385,25 +385,54 @@ const GlobalStyles = () => (
         .form-input { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--gray-200); border-radius: 0.5rem; font-size: 1rem; box-sizing: border-box; }
         .form-textarea { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--gray-200); border-radius: 0.5rem; font-size: 1rem; box-sizing: border-box; min-height: 100px; }
 
+         /* --- NEW: Confirmation Modal Styles --- */
+        .confirmation-modal .modal-content {
+             max-width: 400px; /* Smaller for confirm */
+             padding: 1.5rem;
+         }
+        .confirmation-modal .modal-header {
+             margin-bottom: 1rem;
+         }
+        .confirmation-modal .modal-title {
+             font-size: 1.25rem;
+             display: flex;
+             align-items: center;
+             gap: 0.75rem;
+             color: var(--red-500);
+         }
+        .confirmation-modal .modal-body {
+             gap: 1.5rem;
+         }
+        .confirmation-modal .modal-footer {
+             display: flex;
+             gap: 0.75rem;
+             justify-content: flex-end;
+             margin-top: 1rem;
+         }
+         .confirmation-modal .modal-footer .btn {
+             width: auto; /* Allow buttons to size to content */
+         }
+
+
          /* Error Message Style */
         .error-message {
-            background-color: #fee2e2; /* Light red */
-            color: #b91c1c; /* Darker red */
-            padding: 1rem;
-            border-radius: 0.5rem;
-            border: 1px solid #fecaca; /* Red border */
-            margin-bottom: 1.5rem;
-            text-align: center;
+             background-color: #fee2e2; /* Light red */
+             color: #b91c1c; /* Darker red */
+             padding: 1rem;
+             border-radius: 0.5rem;
+             border: 1px solid #fecaca; /* Red border */
+             margin-bottom: 1.5rem;
+             text-align: center;
         }
          /* Success Message Style */
         .success-message {
-            background-color: #dcfce7; /* Light green */
-            color: #166534; /* Darker green */
-            padding: 1rem;
-            border-radius: 0.5rem;
-            border: 1px solid #bbf7d0; /* Green border */
-            margin-bottom: 1.5rem;
-            text-align: center;
+             background-color: #dcfce7; /* Light green */
+             color: #166534; /* Darker green */
+             padding: 1rem;
+             border-radius: 0.5rem;
+             border: 1px solid #bbf7d0; /* Green border */
+             margin-bottom: 1.5rem;
+             text-align: center;
         }
 
     `}</style>
@@ -411,6 +440,35 @@ const GlobalStyles = () => (
 
 
 // --- Sub-Components ---
+
+// --- NEW: Confirmation Modal ---
+const ConfirmationModal = ({ title, message, onConfirm, onCancel, confirmText = "Confirm", cancelText = "Cancel" }) => {
+    return (
+        <div className="modal-overlay confirmation-modal">
+            <div className="modal-content">
+                <div className="modal-header">
+                    <h3 className="modal-title">
+                        <AlertTriangle size={20} />
+                        {title}
+                    </h3>
+                    <button onClick={onCancel} className="modal-close-btn"><XCircle size={24} /></button>
+                </div>
+                <div className="modal-body">
+                    <p>{message}</p>
+                    <div className="modal-footer">
+                        <button onClick={onCancel} className="btn btn-secondary">
+                            {cancelText}
+                        </button>
+                        <button onClick={onConfirm} className="btn btn-danger">
+                            {confirmText}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 
 // --- Sidebar Component ---
 const Sidebar = React.forwardRef(({ activeTab, onTabClick, onLogout, isCollapsed, onToggle, className }, ref) => {
@@ -586,7 +644,7 @@ const Overview = () => {
             } finally {
                 // Only set loading false if we haven't initiated a redirect
                 if (!error.includes("Redirecting")) {
-                    setLoading(false);
+                     setLoading(false);
                 }
             }
         };
@@ -941,33 +999,41 @@ const UserManagement = () => {
             </table>
         </div>
 
-        {isModalOpen && selectedUser && <UserDetailsModal user={selectedUser} onClose={handleCloseModal} />}
+        {isModalOpen && selectedUser && (
+            <UserDetailsModal 
+                user={selectedUser} 
+                onClose={handleCloseModal} 
+                onAuthError={handleLogout} // Pass logout handler for auth errors in modal
+            />
+        )}
     </div>
     );
 };
 
 
 // --- User Details Modal Component ---
-const UserDetailsModal = ({ user, onClose }) => {
+// MODIFIED: Added onAuthError prop
+const UserDetailsModal = ({ user, onClose, onAuthError }) => {
     const [notice, setNotice] = useState('');
     const [lockHours, setLockHours] = useState('24');
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState('');
-    const navigate = useNavigate(); // For redirect on auth error
+    // --- NEW: State for confirmation modal ---
+    const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
-     // Wrap handleLogout in useCallback
-    const handleLogout = useCallback(() => {
-        console.log("Auth error in Modal, logging out.");
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        navigate('/admin-login');
-    }, [navigate]);
 
+    // Use the passed onAuthError function
+    const handleLogout = onAuthError; 
+
+    // MODIFIED: This just opens the confirm modal
     const handleDelete = async () => {
-        // Use a custom modal or div instead of window.confirm if possible
-        if (!window.confirm(`Are you sure you want to delete ${user?.fullName || 'this user'}? This action cannot be undone.`)) {
-             return;
-        }
+        if (isLoading) return; // Prevent double-click
+        setConfirmDeleteOpen(true);
+    };
+
+    // --- NEW: This function performs the actual delete ---
+    const executeDelete = async () => {
+        setConfirmDeleteOpen(false); // Close confirm modal
         setIsLoading(true);
         setMessage('');
         try {
@@ -982,9 +1048,11 @@ const UserDetailsModal = ({ user, onClose }) => {
                  const data = await safeJson(response) || {message: `HTTP error ${response.status}`};
                  throw new Error(data.message || 'Failed to delete user');
             }
-             // Use a more subtle notification if possible
-            alert("User deleted successfully.");
-            onClose(); // Close modal on success
+            // MODIFIED: Set success message instead of alert
+            setMessage("User deleted successfully. Closing modal...");
+            setTimeout(() => {
+                onClose(); // Close modal on success
+            }, 1500);
         } catch (err) {
             console.error("Error deleting user:", err);
             // Handle auth error
@@ -995,8 +1063,8 @@ const UserDetailsModal = ({ user, onClose }) => {
                  setMessage(`Error: ${err.message}`);
             }
         } finally {
-            // Only stop loading if not redirecting
-            if (!message.includes("Redirecting")) {
+            // Only stop loading if not redirecting or closing
+            if (!message.includes("Redirecting") && !message.includes("Closing")) {
                  setIsLoading(false);
              }
         }
@@ -1089,72 +1157,86 @@ const UserDetailsModal = ({ user, onClose }) => {
     }
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <div className="modal-header">
-                    <h3 className="modal-title">{user.fullName}</h3>
-                    <button onClick={onClose} className="modal-close-btn"><XCircle size={24} /></button>
-                </div>
-                <div className="modal-body">
-                    <p><strong>Email:</strong> {user.email}</p>
-                    <p><strong>Role:</strong> {user.role}</p>
-                    <p><strong>User ID:</strong> {user._id}</p>
-                    {/* Display lock status more clearly */}
-                    <p><strong>Status:</strong> {user.isLocked
-                        ? `Locked until ${user.lockExpiresAt ? new Date(user.lockExpiresAt).toLocaleString() : 'Indefinitely'}`
-                        : 'Active'}
-                    </p>
+        <> {/* Use Fragment to render modal and its confirmation */}
+            <div className="modal-overlay">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h3 className="modal-title">{user.fullName}</h3>
+                        <button onClick={onClose} className="modal-close-btn"><XCircle size={24} /></button>
+                    </div>
+                    <div className="modal-body">
+                        <p><strong>Email:</strong> {user.email}</p>
+                        <p><strong>Role:</strong> {user.role}</p>
+                        <p><strong>User ID:</strong> {user._id}</p>
+                        {/* Display lock status more clearly */}
+                        <p><strong>Status:</strong> {user.isLocked
+                            ? `Locked until ${user.lockExpiresAt ? new Date(user.lockExpiresAt).toLocaleString() : 'Indefinitely'}`
+                            : 'Active'}
+                        </p>
 
-                    <hr style={{margin: '1rem 0'}}/>
-                    {message && <p style={{color: message.startsWith('Error') || message.includes('failed') ? 'var(--red-500)' : 'var(--green-500)', marginBottom: '1rem', textAlign:'center'}}>{message}</p>}
+                        <hr style={{margin: '1rem 0'}}/>
+                        {message && <p style={{color: message.includes('Error') || message.includes('failed') ? 'var(--red-500)' : 'var(--green-500)', marginBottom: '1rem', textAlign:'center'}}>{message}</p>}
 
-                    {/* --- Send Notice Form --- */}
-                    <form onSubmit={handleSendNotice}>
-                        <div className="form-group">
-                            <label className="form-label" htmlFor={`notice-${user._id}`}>Send Notice</label>
-                            <textarea
-                                id={`notice-${user._id}`}
-                                className="form-textarea"
-                                value={notice}
-                                onChange={(e) => setNotice(e.target.value)}
-                                placeholder="Type your warning or notice here..."
-                            />
-                        </div>
-                        <button type="submit" className="btn btn-primary" style={{width: '100%'}} disabled={isLoading || !notice}>
-                            {isLoading ? <Loader2 className="spinner" /> : <><Send size={16} /> Send Notice</>}
+                        {/* --- Send Notice Form --- */}
+                        <form onSubmit={handleSendNotice}>
+                            <div className="form-group">
+                                <label className="form-label" htmlFor={`notice-${user._id}`}>Send Notice</label>
+                                <textarea
+                                    id={`notice-${user._id}`}
+                                    className="form-textarea"
+                                    value={notice}
+                                    onChange={(e) => setNotice(e.target.value)}
+                                    placeholder="Type your warning or notice here..."
+                                />
+                            </div>
+                            <button type="submit" className="btn btn-primary" style={{width: '100%'}} disabled={isLoading || !notice}>
+                                {isLoading ? <Loader2 className="spinner" /> : <><Send size={16} /> Send Notice</>}
+                            </button>
+                        </form>
+
+                        {/* --- Lock Profile Form --- */}
+                        <form onSubmit={handleLockProfile} style={{marginTop: '1rem'}}>
+                            <div className="form-group">
+                                <label className="form-label" htmlFor={`lockHours-${user._id}`}>{user.isLocked ? 'Update Lock Duration (hours)' : 'Lock Profile Duration (hours)'}</label>
+                                <input
+                                    id={`lockHours-${user._id}`}
+                                    type="number"
+                                    className="form-input"
+                                    value={lockHours}
+                                    onChange={(e) => setLockHours(e.target.value)}
+                                    min="0" // Allow 0 to potentially unlock? Check backend logic
+                                    step="1"
+                                />
+                                <small>Set to 0 or leave blank to unlock the profile immediately.</small>
+                            </div>
+                            <button type="submit" className="btn btn-secondary" style={{width: '100%'}} disabled={isLoading}>
+                                 {isLoading ? <Loader2 className="spinner" /> : (user.isLocked ? <><Lock size={16} /> Update Lock</> : <><Lock size={16} /> Lock Profile</>)}
+                            </button>
+                        </form>
+
+                        <hr style={{margin: '1rem 0'}}/>
+
+                        {/* --- Delete Button --- */}
+                        {/* MODIFIED: This now opens the confirmation modal */}
+                        <button onClick={handleDelete} className="btn btn-danger" style={{width: '100%'}} disabled={isLoading}>
+                            {isLoading ? <Loader2 className="spinner" /> : <><Trash2 size={16} /> Delete User</>}
                         </button>
-                    </form>
+                    </div>
 
-                    {/* --- Lock Profile Form --- */}
-                    <form onSubmit={handleLockProfile} style={{marginTop: '1rem'}}>
-                        <div className="form-group">
-                            <label className="form-label" htmlFor={`lockHours-${user._id}`}>{user.isLocked ? 'Update Lock Duration (hours)' : 'Lock Profile Duration (hours)'}</label>
-                            <input
-                                id={`lockHours-${user._id}`}
-                                type="number"
-                                className="form-input"
-                                value={lockHours}
-                                onChange={(e) => setLockHours(e.target.value)}
-                                min="0" // Allow 0 to potentially unlock? Check backend logic
-                                step="1"
-                            />
-                            <small>Set to 0 or leave blank to unlock the profile immediately.</small>
-                        </div>
-                        <button type="submit" className="btn btn-secondary" style={{width: '100%'}} disabled={isLoading}>
-                             {isLoading ? <Loader2 className="spinner" /> : (user.isLocked ? <><Lock size={16} /> Update Lock</> : <><Lock size={16} /> Lock Profile</>)}
-                        </button>
-                    </form>
-
-                    <hr style={{margin: '1rem 0'}}/>
-
-                    {/* --- Delete Button --- */}
-                    <button onClick={handleDelete} className="btn btn-danger" style={{width: '100%'}} disabled={isLoading}>
-                        {isLoading ? <Loader2 className="spinner" /> : <><Trash2 size={16} /> Delete User</>}
-                    </button>
                 </div>
-
             </div>
-        </div>
+
+            {/* --- NEW: Render confirmation modal --- */}
+            {isConfirmDeleteOpen && (
+                <ConfirmationModal
+                    title="Confirm Deletion"
+                    message={`Are you sure you want to delete ${user.fullName}? This action cannot be undone.`}
+                    onCancel={() => setConfirmDeleteOpen(false)}
+                    onConfirm={executeDelete}
+                    confirmText="Delete User"
+                />
+            )}
+        </>
     );
 };
 
@@ -1252,13 +1334,13 @@ const Complaints = () => {
         }
     };
 
-     // Placeholder for replying functionality
-     const handleReply = (complaintId) => {
+      // Placeholder for replying functionality
+      const handleReply = (complaintId) => {
          alert(`Replying to complaint ID: ${complaintId} (Not fully implemented - Add Modal or Form)`);
          // TODO: Open a modal or dedicated reply section to send a message via POST /admin/complaints/:id/reply
-     };
+      };
 
-     // If loading, show spinner. If error includes redirect message, show that instead of table.
+      // If loading, show spinner. If error includes redirect message, show that instead of table.
     if (loading) return <div className="loading-container"><Loader2 className="spinner" /></div>;
     if (error.includes("Redirecting")) return <div className="error-message">{error}</div>;
 
@@ -1517,7 +1599,7 @@ const PlatformSettings = () => {
                      {/* Show message: success or error */ }
                      {message && !message.includes("Redirecting") && (
                          <div className={message.includes("success") ? "success-message" : "error-message"}>
-                            {message}
+                             {message}
                          </div>
                      )}
                     <div className="form-group">
@@ -1535,7 +1617,7 @@ const PlatformSettings = () => {
                         />
                          <small>This percentage will be deducted from owner earnings.</small>
                     </div>
-                    <button type="submit" className="btn btn-primary" disabled={saving || loading}>
+                    <button type-="submit" className="btn btn-primary" disabled={saving || loading}>
                         {saving ? <Loader2 className="spinner" size={16}/> : 'Save Settings'}
                     </button>
                 </form>
@@ -1552,7 +1634,7 @@ function AdminDashboard() {
   const [userData, setUserData] = useState(null); // Store user data if auth passes
   const navigate = useNavigate();
 
-   // --- Sidebar State ---
+    // --- Sidebar State ---
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth > 768);
   const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 768);
 
@@ -1569,44 +1651,44 @@ function AdminDashboard() {
        navigate('/admin-login'); // Ensure this route exists in your routing setup
   }, [navigate]); // Dependency on navigate
 
-   // --- Window Resize Effect ---
-   useEffect(() => {
-        const handleResize = () => {
-            const mobile = window.innerWidth <= 768;
-            setIsMobileView(mobile);
-            // If switching TO mobile, always close. If switching TO desktop, default to open.
-             if (mobile) {
-                 setIsSidebarOpen(false);
-             } else {
-                 setIsSidebarOpen(true);
-             }
-        };
+    // --- Window Resize Effect ---
+    useEffect(() => {
+         const handleResize = () => {
+             const mobile = window.innerWidth <= 768;
+             setIsMobileView(mobile);
+             // If switching TO mobile, always close. If switching TO desktop, default to open.
+              if (mobile) {
+                  setIsSidebarOpen(false);
+              } else {
+                  setIsSidebarOpen(true);
+              }
+         };
 
-        window.addEventListener('resize', handleResize);
-        // Initial check
-        handleResize();
-        return () => window.removeEventListener('resize', handleResize);
+         window.addEventListener('resize', handleResize);
+         // Initial check
+         handleResize();
+         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
      // --- Click Outside Sidebar Effect (Mobile Only) ---
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            // Only run on mobile when the sidebar is open
-            if (isMobileView && isSidebarOpen && sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-                 // Check if the click was outside the sidebar itself
-                 // AND also check it wasn't the mobile toggle button
-                 const mobileToggle = document.querySelector('.mobile-menu-btn');
-                 if (!mobileToggle || !mobileToggle.contains(event.target)) {
-                     setIsSidebarOpen(false);
-                 }
-            }
-        };
+     useEffect(() => {
+         const handleClickOutside = (event) => {
+             // Only run on mobile when the sidebar is open
+             if (isMobileView && isSidebarOpen && sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+                  // Check if the click was outside the sidebar itself
+                  // AND also check it wasn't the mobile toggle button
+                  const mobileToggle = document.querySelector('.mobile-menu-btn');
+                  if (!mobileToggle || !mobileToggle.contains(event.target)) {
+                       setIsSidebarOpen(false);
+                  }
+             }
+         };
 
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [isMobileView, isSidebarOpen]); // Rerun when mobile view or sidebar state changes
+         document.addEventListener('mousedown', handleClickOutside);
+         return () => {
+             document.removeEventListener('mousedown', handleClickOutside);
+         };
+     }, [isMobileView, isSidebarOpen]); // Rerun when mobile view or sidebar state changes
 
 
   useEffect(() => {
@@ -1616,7 +1698,7 @@ function AdminDashboard() {
     const user = getUserData();
 
     if (!token || !user || user.role !== 'Admin') {
-        console.warn("Redirecting: No token or invalid user role for Admin Dashboard.", {tokenExists: !!token, userExists: !!user, userRole: user?.role});
+       console.warn("Redirecting: No token or invalid user role for Admin Dashboard.", {tokenExists: !!token, userExists: !!user, userRole: user?.role});
         // Immediately trigger logout/redirect
         handleLogout();
         // Keep isLoading=true, the component will unmount on redirect
@@ -1630,27 +1712,27 @@ function AdminDashboard() {
   }, [navigate, handleLogout]); // Dependencies
 
  
-   // --- Sidebar Toggle Logic ---
+    // --- Sidebar Toggle Logic ---
     const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
+         setIsSidebarOpen(!isSidebarOpen);
     };
 
     const handleTabClick = (tabName) => {
-        setActiveTab(tabName);
-        if (isMobileView) {
-            setIsSidebarOpen(false); // Close sidebar on mobile after click
-        }
+         setActiveTab(tabName);
+         if (isMobileView) {
+             setIsSidebarOpen(false); // Close sidebar on mobile after click
+         }
     };
 
 
   const renderContent = () => {
-      // If we are loading (i.e., auth check hasn't passed), render nothing in the main area
-      if (isLoading) {
-           // The full-page loader is already handling this
-           return null;
-      }
-      // If loading is false, we know auth passed (otherwise we'd have redirected)
-      // So userData should be present
+     // If we are loading (i.e., auth check hasn't passed), render nothing in the main area
+     if (isLoading) {
+         // The full-page loader is already handling this
+         return null;
+     }
+     // If loading is false, we know auth passed (otherwise we'd have redirected)
+     // So userData should be present
        if (!userData) {
            // This case should ideally not be hit if logic is correct
            // But as a fallback:
@@ -1659,17 +1741,17 @@ function AdminDashboard() {
            return null;
        }
 
-      // Render content based on activeTab
-      switch (activeTab) {
-          case 'overview': return <Overview />;
-          case 'verification': return <DocumentVerification />;
-          case 'users': return <UserManagement />;
-          case 'revenue': return <PlatformRevenue />;
-          case 'complaints': return <Complaints />;
-          case 'feedback': return <AppFeedback />;
-          case 'settings': return <PlatformSettings />;
-          default: return <Overview />;
-      }
+     // Render content based on activeTab
+     switch (activeTab) {
+         case 'overview': return <Overview />;
+         case 'verification': return <DocumentVerification />;
+         case 'users': return <UserManagement />;
+         case 'revenue': return <PlatformRevenue />;
+         case 'complaints': return <Complaints />;
+         case 'feedback': return <AppFeedback />;
+         case 'settings': return <PlatformSettings />;
+         default: return <Overview />;
+     }
   };
 
   // If initial loading is true (during auth check), show the main full-page loader
@@ -1692,35 +1774,35 @@ function AdminDashboard() {
       <div className="dashboard">
          {/* Overlay for mobile menu */}
         <div
-            className={`sidebar-overlay ${isMobileView && isSidebarOpen ? 'open' : ''}`}
-            onClick={toggleSidebar} // Close on overlay click
+             className={`sidebar-overlay ${isMobileView && isSidebarOpen ? 'open' : ''}`}
+             onClick={toggleSidebar} // Close on overlay click
         ></div>
 
         <Sidebar
-            ref={sidebarRef} // Pass the ref here
-            activeTab={activeTab}
-            onTabClick={handleTabClick}
-            onLogout={handleLogout}
-            // Collapse logic: collapsed only if NOT mobile AND sidebar is closed
-            isCollapsed={!isMobileView && !isSidebarOpen}
-            onToggle={toggleSidebar}
-            // Open class: applied only if mobile AND sidebar is open
-            className={isMobileView && isSidebarOpen ? 'open' : ''}
+             ref={sidebarRef} // Pass the ref here
+             activeTab={activeTab}
+             onTabClick={handleTabClick}
+             onLogout={handleLogout}
+             // Collapse logic: collapsed only if NOT mobile AND sidebar is closed
+             isCollapsed={!isMobileView && !isSidebarOpen}
+             onToggle={toggleSidebar}
+             // Open class: applied only if mobile AND sidebar is open
+             className={isMobileView && isSidebarOpen ? 'open' : ''}
         />
-       
+        
         <main
-            ref={mainContentRef} // Added ref to main content
-            className={`dashboard__main ${!isMobileView && !isSidebarOpen ? 'sidebar-collapsed' : ''}`}
+             ref={mainContentRef} // Added ref to main content
+             className={`dashboard__main ${!isMobileView && !isSidebarOpen ? 'sidebar-collapsed' : ''}`}
         >
              {/* Mobile Header only shown in mobile view */}
             {isMobileView && (
-                <div className="mobile-header">
-                    <button onClick={toggleSidebar} className="mobile-menu-btn" title="Open Menu">
-                        <Menu size={24} />
-                    </button>
-                    <h1 className="logo-mobile">ADMIN</h1>
-                    <span style={{width: '40px'}}></span> {/* Spacer */}
-                </div>
+                 <div className="mobile-header">
+                     <button onClick={toggleSidebar} className="mobile-menu-btn" title="Open Menu">
+                         <Menu size={24} />
+                     </button>
+                     <h1 className="logo-mobile">ADMIN</h1>
+                     <span style={{width: '40px'}}></span> {/* Spacer */}
+                 </div>
             )}
             {renderContent()} {/* Renders content or null (while loading) */}
         </main>

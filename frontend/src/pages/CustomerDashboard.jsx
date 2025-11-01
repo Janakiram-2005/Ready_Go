@@ -1,23 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-// Import 'useNavigate' for programmatic navigation on logout
 import { useNavigate } from 'react-router-dom';
 import {
     ShieldCheck, MapPin, Search, User, LayoutDashboard, History, FileText,
     CreditCard, UserCog, LogOut, ArrowLeft, CheckCircle, PlusCircle, Wrench,
     Loader2, Mail, Phone, Bell, X, CreditCard as CreditCardIcon,
-    MessageSquareWarning, // For complaints
-    Lock, // For password
-    Menu, // For hamburger icon
-    Calendar, // For date
-    Trash2, // For deleting cards & notifications
-    Star, // For ratings
-    Video, // For video modal
-    MessageSquare, // For contact owner
-    Send // For feedback submit
+    MessageSquareWarning, Lock, Menu, Calendar, Trash2, Star, Video,
+    MessageSquare, Send
 } from 'lucide-react';
 
 // --- API & Auth Helpers ---
-// --- MODIFIED: Use Environment Variable for API URL ---
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3030';
 const getAuthToken = () => localStorage.getItem('token');
 
@@ -31,7 +22,7 @@ const getUserData = () => {
         return null;
      } catch (e) {
         console.error("Error parsing user data from localStorage", e);
-        localStorage.removeItem('user'); // Clear invalid data
+        localStorage.removeItem('user');
         return null;
      }
 };
@@ -277,7 +268,7 @@ const CustomerDashboardStyles = () => (
           justify-content: flex-start;
          }
          .dashboard__sidebar.collapsed .nav-item svg {
-            margin-right: 0.75rem;
+           margin-right: 0.75rem;
          }
          .dashboard__sidebar.collapsed .sidebar-header {
           justify-content: space-between;
@@ -288,12 +279,12 @@ const CustomerDashboardStyles = () => (
           padding: 1.5rem;
          }
          .dashboard__main.sidebar-collapsed {
-            margin-left: 0;
+           margin-left: 0;
          }
 
          .mobile-header {
           display: flex;
-            margin: -1.5rem -1.5rem 1.5rem -1.5rem; /* Adjust for mobile padding */
+           margin: -1.5rem -1.5rem 1.5rem -1.5rem; /* Adjust for mobile padding */
          }
          .sidebar-overlay.open {
           display: block;
@@ -476,7 +467,7 @@ const CustomerDashboardStyles = () => (
         .reply-item { background-color: var(--gray-100); padding: 1rem; border-radius: 0.5rem; }
         .reply-item-header { font-size: 0.875rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.5rem; }
         .reply-item-body { color: var(--gray-800); }
-       
+        
         .loading-container { display: flex; justify-content: center; align-items: center; padding: 2rem; }
         .spinner { animation: spin 1s linear infinite; }
         .fade-in { animation: fadeIn 0.5s ease-out forwards; }
@@ -498,7 +489,7 @@ const CustomerDashboardStyles = () => (
         .modal-title { font-size: 1.5rem; font-weight: 700; color: var(--gray-800); }
         .modal-close-btn { background: none; border: none; cursor: pointer; color: var(--gray-600); padding: 0.5rem; }
         .modal-body { display: flex; flex-direction: column; gap: 1rem; }
-       
+        
         /* Star Rating Component */
         .star-rating { display: flex; gap: 0.25rem; cursor: pointer; }
         .star-rating .star { color: var(--gray-300); transition: color 0.2s; }
@@ -547,7 +538,7 @@ const Sidebar = React.forwardRef(({ activeTab, onTabClick, onLogout, isCollapsed
                 <NavItem tabName="history" icon={<History />}>Booking History</NavItem>
                 <NavItem tabName="notifications" icon={<Bell />} hasNotification={unreadCount > 0}>Notifications</NavItem>
                 <NavItem tabName="verify" icon={<FileText />}>Verify Docs</NavItem>
-                <NavItem tabName="ratings" icon={<Star />}>Ratings</NavItem> {/* ADDED Ratings NavItem */}
+                <NavItem tabName="ratings" icon={<Star />}>Ratings</NavItem>
                 <NavItem tabName="complaints" icon={<MessageSquareWarning />}>Complaints</NavItem>
                 <NavItem tabName="payment" icon={<CreditCard />}>Payments</NavItem>
                 <NavItem tabName="profile" icon={<UserCog />}>Profile</NavItem>
@@ -677,8 +668,8 @@ const FeedbackModal = ({ booking, onClose, onFeedbackSubmitted }) => {
                  })
              });
              if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.message || 'Failed to submit feedback.');
+                 const errData = await response.json();
+                 throw new Error(errData.message || 'Failed to submit feedback.');
              }
             
             onFeedbackSubmitted(booking._id); // Tell parent component to update
@@ -803,7 +794,7 @@ const CustomerDashboardHome = ({ setActiveTab }) => {
              <div className="card">
                 <h3 className="sub-title">Recent Notifications</h3>
                 <p>Check the <button className="btn-link" onClick={() => setActiveTab('notifications')}>Notifications</button> tab for updates.</p>
-            </div>
+             </div>
         </div>
     );
 };
@@ -859,21 +850,21 @@ const CustomerVehicleSearch = ({ setSelectedVehicle }) => {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                </div>
+                 </div>
                  <div className="filter-grid">
-                      <div className="form-group">
-                        <label className="form-label">Type</label>
-                        <select name="type" value={filters.type} onChange={handleFilterChange} className="form-select">
-                            <option>All</option>
-                            <option>Car</option>
-                            <option>Bike</option>
-                            <option>Scooter</option>
-                        </select>
-                      </div>
-                      <div className="form-group range-group">
-                        <label className="form-label">Max Price: ₹{parseInt(filters.price).toLocaleString('en-IN')}</label>
-                        <input type="range" name="price" min="500" max="5000" step="100" value={filters.price} onChange={handleFilterChange} className="range-slider"/>
-                      </div>
+                       <div className="form-group">
+                         <label className="form-label">Type</label>
+                         <select name="type" value={filters.type} onChange={handleFilterChange} className="form-select">
+                             <option>All</option>
+                             <option>Car</option>
+                             <option>Bike</option>
+                             <option>Scooter</option>
+                         </select>
+                       </div>
+                       <div className="form-group range-group">
+                         <label className="form-label">Max Price: ₹{parseInt(filters.price).toLocaleString('en-IN')}</label>
+                         <input type="range" name="price" min="500" max="5000" step="100" value={filters.price} onChange={handleFilterChange} className="range-slider"/>
+                       </div>
                  </div>
             </div>
             {loading && <div className="loading-container"><Loader2 className="spinner" /></div>}
@@ -940,8 +931,8 @@ const CustomerMapSearch = ({ setSelectedVehicle }) => {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                </div>
-                <p>Showing results for vehicles available in your searched location. A full map view is coming soon!</p>
+                 </div>
+                 <p>Showing results for vehicles available in your searched location. A full map view is coming soon!</p>
             </div>
             {loading && <div className="loading-container"><Loader2 className="spinner" /></div>}
             {error && <div className="error-message">{error}</div>}
@@ -951,8 +942,8 @@ const CustomerMapSearch = ({ setSelectedVehicle }) => {
                         <CustomerVehicleCard key={vehicle._id} vehicle={vehicle} onSelect={setSelectedVehicle} />
                     )) : (
                          <p className="text-center" style={{gridColumn: '1 / -1'}}>
-                            {searchTerm ? 'No vehicles found in that location.' : 'No vehicles currently available.'}
-                        </p>
+                             {searchTerm ? 'No vehicles found in that location.' : 'No vehicles currently available.'}
+                         </p>
                     )}
                 </div>
             )}
@@ -982,44 +973,44 @@ const CustomerBookingHistory = ({ bookings, loading, error, onOpenVideoModal, on
                  {error && <div className="error-message">{error}</div>}
                  {!loading && !error && bookings.length === 0 && <p style={{textAlign: 'center'}}>You haven't made any bookings yet.</p>}
                  {!loading && !error && bookings.length > 0 && (
-                      <table className="data-table">
-                           <thead><tr><th>Booking ID</th><th>Vehicle</th><th>Dates</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead>
-                           <tbody>
-                                {bookings.map(booking => (
-                                     <tr key={booking._id}>
-                                         <td>{booking._id.slice(-8)}</td>
-                                         <td>{booking.vehicleId?.name || 'Vehicle Removed'}</td>
-                                         <td>{new Date(booking.startDate).toLocaleDateString()} to {new Date(booking.endDate).toLocaleDateString()}</td>
-                                         <td>₹{booking.totalPrice.toLocaleString('en-IN')}</td>
-                                         <td><span className={`status-chip ${getStatusChipClass(booking.status)}`}>{booking.status}</span></td>
-                                         <td>
-                                             {/* --- Workflow Actions --- */}
-                                             {(booking.status === 'Upcoming' || booking.status === 'Confirmed') && booking.preRideVideo && ( // Only show if video exists
-                                                 <button className="btn-link" onClick={() => onOpenVideoModal(booking)}>
-                                                     <Video size={16} style={{marginRight: '0.25rem'}}/> View Condition
-                                                 </button>
-                                             )}
-                                             {booking.status === 'Completed' && !booking.feedbackGiven && (
-                                                  <button className="btn-link" onClick={() => onOpenFeedbackModal(booking)}>
-                                                      <Star size={16} style={{marginRight: '0.25rem'}}/> Leave Feedback
-                                                  </button>
-                                             )}
-                                             {booking.status === 'Completed' && booking.feedbackGiven && (
-                                                  <span style={{color: 'var(--gray-600)', display: 'flex', alignItems: 'center', gap: '0.25rem'}}>
-                                                      <CheckCircle size={16} /> Feedback Submitted
-                                                  </span>
-                                             )}
-                                              {booking.status === 'Pending' && (
-                                                  <span style={{color: 'var(--gray-600)'}}>Waiting for Owner</span>
-                                             )}
-                                              {booking.status === 'Cancelled' && (
-                                                  <span style={{color: 'var(--gray-600)'}}>No Action</span>
-                                             )}
-                                         </td>
-                                     </tr>
-                                ))}
-                           </tbody>
-                      </table>
+                     <table className="data-table">
+                         <thead><tr><th>Booking ID</th><th>Vehicle</th><th>Dates</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead>
+                         <tbody>
+                             {bookings.map(booking => (
+                                 <tr key={booking._id}>
+                                     <td>{booking._id.slice(-8)}</td>
+                                     <td>{booking.vehicleId?.name || 'Vehicle Removed'}</td>
+                                     <td>{new Date(booking.startDate).toLocaleDateString()} to {new Date(booking.endDate).toLocaleDateString()}</td>
+                                     <td>₹{booking.totalPrice.toLocaleString('en-IN')}</td>
+                                     <td><span className={`status-chip ${getStatusChipClass(booking.status)}`}>{booking.status}</span></td>
+                                     <td>
+                                         {/* --- Workflow Actions --- */}
+                                         {(booking.status === 'Upcoming' || booking.status === 'Confirmed') && booking.preRideVideo && ( // Only show if video exists
+                                             <button className="btn-link" onClick={() => onOpenVideoModal(booking)}>
+                                                 <Video size={16} style={{marginRight: '0.25rem'}}/> View Condition
+                                             </button>
+                                         )}
+                                         {booking.status === 'Completed' && !booking.feedbackGiven && (
+                                              <button className="btn-link" onClick={() => onOpenFeedbackModal(booking)}>
+                                                  <Star size={16} style={{marginRight: '0.25rem'}}/> Leave Feedback
+                                              </button>
+                                         )}
+                                         {booking.status === 'Completed' && booking.feedbackGiven && (
+                                              <span style={{color: 'var(--gray-600)', display: 'flex', alignItems: 'center', gap: '0.25rem'}}>
+                                                  <CheckCircle size={16} /> Feedback Submitted
+                                              </span>
+                                         )}
+                                          {booking.status === 'Pending' && (
+                                              <span style={{color: 'var(--gray-600)'}}>Waiting for Owner</span>
+                                         )}
+                                          {booking.status === 'Cancelled' && (
+                                              <span style={{color: 'var(--gray-600)'}}>No Action</span>
+                                         )}
+                                     </td>
+                                 </tr>
+                             ))}
+                         </tbody>
+                     </table>
                  )}
             </div>
         </div>
@@ -1040,19 +1031,19 @@ const CustomerVerifyDocuments = () => {
         const fetchDocStatus = async () => {
              setFetchLoading(true);
              try {
-                const token = getAuthToken();
-                const response = await fetch(`${API_BASE_URL}/documents/status`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if(response.ok) {
-                    const data = await response.json();
-                    setDocs({
-                        license: { file: null, status: data.licenseStatus || 'Not Uploaded', number: data.licenseNumber || '' },
-                        address: { file: null, status: data.addressStatus || 'Not Uploaded', number: data.aadhaarNumber || '' }
-                    });
-                } else {
-                     throw new Error("Failed to fetch status");
-                }
+                 const token = getAuthToken();
+                 const response = await fetch(`${API_BASE_URL}/documents/status`, {
+                     headers: { 'Authorization': `Bearer ${token}` }
+                 });
+                 if(response.ok) {
+                     const data = await response.json();
+                     setDocs({
+                         license: { file: null, status: data.licenseStatus || 'Not Uploaded', number: data.licenseNumber || '' },
+                         address: { file: null, status: data.addressStatus || 'Not Uploaded', number: data.aadhaarNumber || '' }
+                     });
+                 } else {
+                      throw new Error("Failed to fetch status");
+                 }
              } catch (err) {
                  console.error("Failed to fetch document status:", err);
                  setMessage("Error fetching current document status.");
@@ -1136,13 +1127,13 @@ const CustomerVerifyDocuments = () => {
     };
 
      const getStatusChipClass = (status) => {
-          switch (status) {
-              case 'Verified': return 'status-chip-green';
-              case 'Pending Review': return 'status-chip-yellow';
-              case 'Ready to Upload': return 'status-chip-blue';
-              case 'Rejected': return 'status-chip-red';
-              default: return 'status-chip-gray';
-          }
+         switch (status) {
+             case 'Verified': return 'status-chip-green';
+             case 'Pending Review': return 'status-chip-yellow';
+             case 'Ready to Upload': return 'status-chip-blue';
+             case 'Rejected': return 'status-chip-red';
+             default: return 'status-chip-gray';
+         }
        };
 
 
@@ -1173,7 +1164,7 @@ const CustomerVerifyDocuments = () => {
                         <span className="file-name">{docs.license.file?.name || 'No file chosen'}</span>
                         <span className={`status-chip ${getStatusChipClass(docs.license.status)}`}>{docs.license.status}</span>
                     </div>
-                      {docs.license.status === 'Rejected' && <small style={{color: 'var(--red-500)', marginTop: '0.5rem'}}>Your license was rejected. Please upload a new, clear image.</small>}
+                     {docs.license.status === 'Rejected' && <small style={{color: 'var(--red-500)', marginTop: '0.5rem'}}>Your license was rejected. Please upload a new, clear image.</small>}
                 </div>
 
                 {/* --- Address Proof Section --- */}
@@ -1495,15 +1486,15 @@ const CustomerVehicleDetail = ({ vehicle, onBack, setActiveTab }) => {
                  method: 'POST',
                  headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
                  body: JSON.stringify({
-                      vehicleId: vehicle._id,
-                      ownerId: ownerId,
-                      startDate: booking.startDate,
-                      endDate: booking.endDate,
-                      totalPrice: booking.totalPrice
+                     vehicleId: vehicle._id,
+                     ownerId: ownerId,
+                     startDate: booking.startDate,
+                     endDate: booking.endDate,
+                     totalPrice: booking.totalPrice
                  })
-              });
-              const data = await response.json();
-              if (!response.ok) throw new Error(data.message || 'Booking failed. Vehicle might be unavailable.');
+             });
+             const data = await response.json();
+             if (!response.ok) throw new Error(data.message || 'Booking failed. Vehicle might be unavailable.');
             
             setMessage('Booking request sent! The owner will confirm and upload a video shortly. Check your history for status.');
 
@@ -1537,25 +1528,25 @@ const CustomerVehicleDetail = ({ vehicle, onBack, setActiveTab }) => {
                     />
                  </div>
                  <div className="vehicle-detail-info">
-                      <h2 className="vehicle-detail-title">{vehicle.name}</h2>
-                      <p className="vehicle-detail-meta"><MapPin size={16}/> {vehicle.location}</p>
-                      <div className="vehicle-detail-price-wrapper">
+                     <h2 className="vehicle-detail-title">{vehicle.name}</h2>
+                     <p className="vehicle-detail-meta"><MapPin size={16}/> {vehicle.location}</p>
+                     <div className="vehicle-detail-price-wrapper">
                          <p className="vehicle-detail-price">₹{vehicle.pricePerDay.toLocaleString('en-IN')} <span>/ day</span></p>
-                      </div>
-                      <p>Owner: {vehicle.ownerId?.fullName || 'N/A'}</p>
-                      <p>Type: {vehicle.type}</p>
-                      
-                      <button className="btn btn-secondary" style={{marginTop: '1.5rem', justifyContent: 'center'}} onClick={handleContactOwner}>
-                         <MessageSquare size={16} /> Contact Owner
-                      </button>
+                     </div>
+                     <p>Owner: {vehicle.ownerId?.fullName || 'N/A'}</p>
+                     <p>Type: {vehicle.type}</p>
+                     
+                     <button className="btn btn-secondary" style={{marginTop: '1.5rem', justifyContent: 'center'}} onClick={handleContactOwner}>
+                        <MessageSquare size={16} /> Contact Owner
+                     </button>
 
-                      <hr style={{margin: '1.5rem 0', border: 'none', borderTop: '1px solid var(--gray-200)'}} />
+                     <hr style={{margin: '1.5rem 0', border: 'none', borderTop: '1px solid var(--gray-200)'}} />
 
-                      <h3 className="sub-title" style={{marginBottom: '1rem'}}>Book Your Ride</h3>
-                      {message && <div className={message.includes('sent') || message.includes('Contacting') ? "success-message" : "error-message"}>{message}</div>}
-                      
-                      <div className="form-grid-col-2">
-                          <div className="form-group">
+                     <h3 className="sub-title" style={{marginBottom: '1rem'}}>Book Your Ride</h3>
+                     {message && <div className={message.includes('sent') || message.includes('Contacting') ? "success-message" : "error-message"}>{message}</div>}
+                     
+                     <div className="form-grid-col-2">
+                         <div className="form-group">
                              <label className="form-label" htmlFor="startDate">Start Date</label>
                              <input 
                                  type="date" 
@@ -1612,12 +1603,36 @@ const CustomerVehicleDetail = ({ vehicle, onBack, setActiveTab }) => {
 
 // --- IMPLEMENTED: Customer Payment Methods ---
 const CustomerPaymentMethods = () => {
-    const [cards, setCards] = useState([
-        { id: 1, last4: '1234', expiry: '12/25' } // Mock data
-    ]);
+    const [cards, setCards] = useState([]); // MODIFIED: Start empty
     const [newCard, setNewCard] = useState({ number: '', expiry: '', cvv: '' });
     const [message, setMessage] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false); // For add
+    const [fetchLoading, setFetchLoading] = useState(true); // For fetch
+
+    // --- NEW: Fetch cards on load ---
+    const fetchCards = useCallback(async () => {
+        setFetchLoading(true);
+        setMessage('');
+        try {
+            const token = getAuthToken();
+            const response = await fetch(`${API_BASE_URL}/payments/cards`, {
+                 headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (!response.ok) throw new Error('Failed to fetch cards.');
+            const data = await response.json();
+            setCards(Array.isArray(data) ? data : []); // Ensure data is an array
+        } catch (err) {
+            console.error(err);
+            setMessage("Error fetching saved cards: " + err.message);
+        } finally {
+            setFetchLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchCards();
+    }, [fetchCards]);
+
 
     const handleFormChange = (e) => {
         let { name, value } = e.target;
@@ -1636,7 +1651,7 @@ const CustomerPaymentMethods = () => {
     };
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setMessage('');
@@ -1667,22 +1682,66 @@ const CustomerPaymentMethods = () => {
              setLoading(false); return;
         }
 
-        // Mock API call
-        setTimeout(() => {
-            const newCardData = {
-                id: Date.now(),
-                last4: newCard.number.slice(-4),
-                expiry: newCard.expiry
-            };
-            setCards(prev => [...prev, newCardData]);
-            setNewCard({ number: '', expiry: '', cvv: '' });
-            setMessage('Card added successfully!');
-            setLoading(false);
-        }, 1000);
+        // --- MODIFIED: Real API call (to mock) ---
+        try {
+            const token = getAuthToken();
+             const response = await fetch(`${API_BASE_URL}/payments/cards`, {
+                 method: 'POST',
+                 headers: {
+                     'Authorization': `Bearer ${token}`,
+                     'Content-Type': 'application/json'
+                 },
+                 // Send only what the mock backend expects (it ignores the body anyway)
+                 body: JSON.stringify({
+                     number: newCard.number,
+                     expiry: newCard.expiry,
+                     cvv: newCard.cvv
+                 })
+             });
+             const data = await response.json();
+             if (!response.ok) throw new Error(data.message || 'Failed to add card.');
+
+             // Manually add to state as mock POST doesn't return the card
+             // In a real app, the backend would return the new card
+             const newCardData = {
+                 id: Date.now(), // Mock ID
+                 last4: newCard.number.slice(-4),
+                 expiry: newCard.expiry
+             };
+             setCards(prev => [...prev, newCardData]);
+             setNewCard({ number: '', expiry: '', cvv: '' });
+             setMessage('Card added successfully!');
+        } catch (err) {
+             console.error(err);
+             setMessage("Error adding card: " + err.message);
+        } finally {
+             setLoading(false);
+        }
     };
 
-    const deleteCard = (id) => {
+    const deleteCard = async (id) => {
+        // Optimistic UI update
+        const originalCards = cards;
         setCards(prev => prev.filter(card => card.id !== id));
+        setMessage('');
+
+         // --- MODIFIED: Real API call (to mock) ---
+        try {
+             const token = getAuthToken();
+             const response = await fetch(`${API_BASE_URL}/payments/cards/${id}`, {
+                 method: 'DELETE',
+                 headers: { 'Authorization': `Bearer ${token}` }
+             });
+             const data = await response.json();
+             if (!response.ok) throw new Error(data.message || 'Failed to delete card.');
+             // Success, do nothing (already removed from UI)
+             setMessage('Card deleted successfully.');
+             setTimeout(() => setMessage(''), 2000); // Clear message
+        } catch (err) {
+             console.error(err);
+             setMessage("Error deleting card: " + err.message);
+             setCards(originalCards); // Revert on failure
+        }
     };
 
     return (
@@ -1747,7 +1806,9 @@ const CustomerPaymentMethods = () => {
             {/* Saved Cards List */}
             <div className="card">
                 <h3 className="sub-title">Your Saved Cards</h3>
-                {cards.length === 0 ? (
+                {fetchLoading ? (
+                     <div className="loading-container"><Loader2 className="spinner" /></div>
+                ) : cards.length === 0 ? (
                     <p>You have no saved cards.</p>
                 ) : (
                     <div>
@@ -1886,32 +1947,32 @@ const CustomerNotifications = () => {
             {error && <div className="error-message card">{error}</div>}
             {!loading && !error && (
                  notifications.length === 0 ? (
-                      <div className="card text-center">
-                          <Bell size={48} className="placeholder-icon" style={{color: 'var(--gray-400)'}} />
-                          <p>No new notifications.</p>
-                      </div>
+                     <div className="card text-center">
+                         <Bell size={48} className="placeholder-icon" style={{color: 'var(--gray-400)'}} />
+                         <p>No new notifications.</p>
+                     </div>
                  ) : (
-                      <ul className="notification-list">
-                          {notifications.map(notif => (
-                              <li key={notif._id} className="notification-item">
-                                  <div className="notification-icon">
-                                      <Bell size={20} />
-                                  </div>
-                                  <div className="notification-content">
-                                      <p className="notification-message">{notif.message}</p>
-                                      <p className="notification-time">{formatTimeAgo(notif.createdAt)}</p>
-                                  </div>
-                                  {/* Delete Button */}
-                                  <button
-                                      onClick={() => handleDeleteNotification(notif._id)}
-                                      className="notification-delete-btn"
-                                      title="Delete Notification"
-                                  >
-                                      <Trash2 size={18} />
-                                  </button>
-                              </li>
-                          ))}
-                      </ul>
+                     <ul className="notification-list">
+                         {notifications.map(notif => (
+                             <li key={notif._id} className="notification-item">
+                                 <div className="notification-icon">
+                                     <Bell size={20} />
+                                 </div>
+                                 <div className="notification-content">
+                                     <p className="notification-message">{notif.message}</p>
+                                     <p className="notification-time">{formatTimeAgo(notif.createdAt)}</p>
+                                 </div>
+                                 {/* Delete Button */}
+                                 <button
+                                     onClick={() => handleDeleteNotification(notif._id)}
+                                     className="notification-delete-btn"
+                                     title="Delete Notification"
+                                 >
+                                     <Trash2 size={18} />
+                                 </button>
+                             </li>
+                         ))}
+                     </ul>
                  )
             )}
         </div>
@@ -2103,15 +2164,15 @@ const CustomerRatings = () => {
                                                <span className="rating-reviewer">{r.reviewerId?.fullName || 'Anonymous User'}</span>
                                                <StarRatingDisplay rating={r.rating} />
                                           </div>
-                                           {/* Display vehicle if it's a vehicle/owner review */}
-                                           {(r.reviewType === 'Vehicle' || r.reviewType === 'Owner') && r.bookingId?.vehicleId?.name && (
-                                                <p className="rating-vehicle">For: {r.bookingId.vehicleId.name}</p>
-                                            )}
-                                           {/* Display comment if exists */}
-                                           {r.comment && <p className="rating-comment">"{r.comment}"</p>}
-                                           <p style={{fontSize: '0.8rem', color: 'var(--gray-600)', marginTop: '0.5rem'}}>
+                                          {/* Display vehicle if it's a vehicle/owner review */}
+                                          {(r.reviewType === 'Vehicle' || r.reviewType === 'Owner') && r.bookingId?.vehicleId?.name && (
+                                               <p className="rating-vehicle">For: {r.bookingId.vehicleId.name}</p>
+                                          )}
+                                          {/* Display comment if exists */}
+                                          {r.comment && <p className="rating-comment">"{r.comment}"</p>}
+                                          <p style={{fontSize: '0.8rem', color: 'var(--gray-600)', marginTop: '0.5rem'}}>
                                                Received: {new Date(r.createdAt).toLocaleDateString()}
-                                            </p>
+                                           </p>
                                      </div>
                                 ))}
                            </div>
@@ -2191,7 +2252,7 @@ function CustomerDashboard() {
     };
 
     // --- Window Resize Effect ---
-      useEffect(() => {
+     useEffect(() => {
         const handleResize = () => {
             const mobile = window.innerWidth <= 768;
             setIsMobileView(mobile);
@@ -2218,7 +2279,7 @@ function CustomerDashboard() {
                  // AND also check it wasn't the mobile toggle button
                  const mobileToggle = document.querySelector('.mobile-menu-btn');
                  if (!mobileToggle || !mobileToggle.contains(event.target)) {
-                     setIsSidebarOpen(false);
+                      setIsSidebarOpen(false);
                  }
             }
         };
@@ -2254,57 +2315,41 @@ function CustomerDashboard() {
             const response = await fetch(`${API_BASE_URL}/bookings/customer`, { headers: { 'Authorization': `Bearer ${token}` } });
             if (!response.ok) throw new Error('Failed to fetch booking history.');
             const data = await response.json();
-            
-            // Check against local list of submitted feedback
             const bookingsWithFeedback = data.map(b => ({
                 ...b,
-                // Check if backend says feedback is given OR if we submitted it this session
                 feedbackGiven: b.feedbackGiven || feedbackSubmittedIds.has(b._id)
             }));
             setBookings(bookingsWithFeedback);
-        } catch (err) { setBookingsError(err.message); }
-        finally { setBookingsLoading(false); }
-    }, [feedbackSubmittedIds]); // Re-fetch if the submitted IDs set changes
+        } catch (err) {
+            setBookingsError(err.message);
+        } finally {
+            setBookingsLoading(false);
+        }
+    }, [feedbackSubmittedIds]);
 
-    // Fetch bookings when history tab is active or when historyKey changes
-      useEffect(() => {
+    useEffect(() => {
         if (activeTab === 'history') {
             fetchBookings();
         }
-    }, [activeTab, fetchBookings, historyKey]); // Re-fetch when tab is opened or key changes
+    }, [activeTab, fetchBookings, historyKey]);
 
-
-    // --- Sidebar Toggle Logic ---
-    const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
-    };
+    const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
     const handleTabClick = (tabName) => {
-        setActiveTab(tabName);
-        setSelectedVehicle(null);
-        if (tabName === 'notifications') {
-            handleMarkNotificationsRead();
-        }
-        if (isMobileView) {
-            setIsSidebarOpen(false); // Close sidebar on mobile after click
-        }
+         setActiveTab(tabName);
+         setSelectedVehicle(null);
+         if (tabName === 'notifications') handleMarkNotificationsRead();
+         if (isMobileView) setIsSidebarOpen(false);
     };
     
-    // --- Modal Handlers ---
-    const handleOpenVideoModal = (booking) => {
-        setVideoModalBooking(booking);
-    };
-    const handleOpenFeedbackModal = (booking) => {
-         setFeedbackModalBooking(booking);
-    };
-    
-    // NEW: Updated feedback submission handler
-    const handleFeedbackSubmitted = (bookingId) => {
-        setFeedbackSubmittedIds(prev => new Set(prev).add(bookingId)); // Track it locally
-        setFeedbackModalBooking(null); // Close modal
-        setHistoryKey(k => k + 1); // Force a refresh of the history component
-    };
+    const handleOpenVideoModal = (booking) => setVideoModalBooking(booking);
+    const handleOpenFeedbackModal = (booking) => setFeedbackModalBooking(booking);
 
+    const handleFeedbackSubmitted = (bookingId) => {
+         setFeedbackSubmittedIds(prev => new Set(prev).add(bookingId));
+         setFeedbackModalBooking(null);
+         setHistoryKey(k => k + 1);
+    };
 
     const renderContent = () => {
         if (selectedVehicle) return <CustomerVehicleDetail vehicle={selectedVehicle} onBack={() => setSelectedVehicle(null)} setActiveTab={setActiveTab} />;
@@ -2323,7 +2368,7 @@ function CustomerDashboard() {
             );
             case 'notifications': return <CustomerNotifications />;
             case 'verify': return <CustomerVerifyDocuments />;
-            case 'ratings': return <CustomerRatings />; {/* ADDED Ratings case */}
+            case 'ratings': return <CustomerRatings />;
             case 'payment': return <CustomerPaymentMethods />;
             case 'complaints': return <CustomerComplaints />;
             case 'profile': return <CustomerEditProfile />;
@@ -2346,43 +2391,38 @@ function CustomerDashboard() {
          <>
              <CustomerDashboardStyles />
              <div className="dashboard theme-customer">
-                 {/* Overlay for mobile menu */}
                  <div
                      className={`sidebar-overlay ${isMobileView && isSidebarOpen ? 'open' : ''}`}
-                     onClick={toggleSidebar} // Close on overlay click
+                     onClick={toggleSidebar}
                  ></div>
 
                  <Sidebar
-                     ref={sidebarRef} // Pass the ref here
+                     ref={sidebarRef}
                      activeTab={activeTab}
                      onTabClick={handleTabClick}
                      onLogout={handleLogout}
-                     // Collapse logic: collapsed only if NOT mobile AND sidebar is closed
                      isCollapsed={!isMobileView && !isSidebarOpen}
                      onToggle={toggleSidebar}
                      unreadCount={unreadCount}
-                     // Open class: applied only if mobile AND sidebar is open
                      className={isMobileView && isSidebarOpen ? 'open' : ''}
                  />
 
                  <main
-                     ref={mainContentRef} // Added ref to main content
+                     ref={mainContentRef}
                      className={`dashboard__main ${!isMobileView && !isSidebarOpen ? 'sidebar-collapsed' : ''}`}
                  >
-                     {/* Mobile Header only shown in mobile view */}
                      {isMobileView && (
                          <div className="mobile-header">
                              <button onClick={toggleSidebar} className="mobile-menu-btn" title="Open Menu">
                                  <Menu size={24} />
                              </button>
                              <h1 className="logo-mobile">READY GO</h1>
-                             <span style={{width: '40px'}}></span> {/* Spacer */}
+                             <span style={{width: '40px'}}></span>
                          </div>
                      )}
                      {renderContent()}
                  </main>
-                 
-                 {/* --- Render Modals --- */}
+
                  {videoModalBooking && (
                      <VehicleConditionModal 
                          booking={videoModalBooking}
@@ -2393,12 +2433,12 @@ function CustomerDashboard() {
                      <FeedbackModal 
                          booking={feedbackModalBooking}
                          onClose={() => setFeedbackModalBooking(null)}
-                         onFeedbackSubmitted={handleFeedbackSubmitted} // Pass the new handler
+                         onFeedbackSubmitted={handleFeedbackSubmitted}
                      />
                  )}
              </div>
          </>
     );
-};
+}
 
 export default CustomerDashboard;

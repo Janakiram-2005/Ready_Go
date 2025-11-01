@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-// Import 'useNavigate' to handle redirects for auth and logout
+import React, { useState, useEffect, useRef, useCallback } from 'react'; // Import useCallback
+// Import 'useNavigate' for programmatic navigation on logout
 import { useNavigate } from 'react-router-dom';
 import {
     LayoutDashboard, Car, ShoppingCart, Star, AlertCircle, Settings, LogOut,
@@ -142,19 +142,19 @@ const GlobalStyles = () => (
          width: var(--sidebar-width-collapsed);
         }
         .dashboard__sidebar.collapsed .sidebar-header {
-          justify-content: center;
-          padding-left: 0;
-          padding-right: 0;
+         justify-content: center;
+         padding-left: 0;
+         padding-right: 0;
         }
         .dashboard__sidebar.collapsed .logo {
-          opacity: 0;
-          pointer-events: none;
-          transition: opacity 0.2s ease, display 0s linear 0s;
-          display: none; /* Remove from layout */
+         opacity: 0;
+         pointer-events: none;
+         transition: opacity 0.2s ease, display 0s linear 0s;
+         display: none; /* Remove from layout */
         }
         .dashboard__sidebar.collapsed .sidebar-toggle-btn {
-          opacity: 1;
-          pointer-events: auto;
+         opacity: 1;
+         pointer-events: auto;
         }
         .dashboard__sidebar.collapsed .nav-text {
          opacity: 0;
@@ -164,7 +164,7 @@ const GlobalStyles = () => (
          margin-left: 0; /* Remove margin when text is hidden */
         }
         .dashboard__sidebar.collapsed .nav-item svg {
-          margin-right: 0;
+         margin-right: 0;
         }
         .dashboard__sidebar.collapsed .nav-item {
          justify-content: center;
@@ -246,7 +246,7 @@ const GlobalStyles = () => (
           padding: 0.75rem 1rem; /* Revert padding */
          }
          .dashboard__sidebar.collapsed .nav-item svg {
-            margin-right: 0.75rem;
+           margin-right: 0.75rem;
          }
           .dashboard__sidebar.collapsed .nav-text {
             margin-left: 0.75rem;
@@ -261,12 +261,12 @@ const GlobalStyles = () => (
           padding: 1.5rem;
          }
          .dashboard__main.sidebar-collapsed {
-            margin-left: 0;
+           margin-left: 0;
          }
 
          .mobile-header {
           display: flex;
-            margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+           margin: -1.5rem -1.5rem 1.5rem -1.5rem;
          }
          .sidebar-overlay.open {
           display: block;
@@ -295,7 +295,12 @@ const GlobalStyles = () => (
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; }
         .stat-number { font-size: 2.25rem; font-weight: 700; margin-top: 0.5rem; }
         .data-table { width: 100%; border-collapse: collapse; }
-        .data-table th, .data-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--gray-200); white-space: nowrap; }
+        .data-table th, .data-table td { 
+            padding: 0.75rem 1rem; 
+            text-align: left; 
+            border-bottom: 1px solid var(--gray-200); 
+            /* MODIFICATION: Removed white-space: nowrap; */
+        }
         .data-table th { background-color: var(--gray-100); font-size: 0.75rem; text-transform: uppercase; }
         .overflow-auto { overflow-x: auto; }
         .button-group-sm { display:flex; gap: 0.5rem; flex-wrap: wrap; }
@@ -400,6 +405,70 @@ const GlobalStyles = () => (
          color: var(--owner-primary);
         }
         .hidden { display: none; }
+        
+        /* --- NEW: Mobile Responsiveness Improvements --- */
+        @media (max-width: 480px) {
+            /* Stack buttons in modals on small screens */
+            .modal-content .form-actions {
+                flex-direction: column;
+            }
+            .modal-content .form-actions .btn {
+                width: 100%; /* Make buttons full-width in modal */
+            }
+            /* Special case for CompleteRideModal to stack */
+            .modal-body .form-actions[style*="space-between"] {
+                 flex-direction: column-reverse; /* Put positive action last */
+                 gap: 1rem;
+            }
+            .modal-body .form-actions[style*="space-between"] .btn {
+                 width: 100%;
+            }
+
+            /* Make data tables a bit more readable on mobile */
+            .data-table th, .data-table td {
+                padding: 0.75rem 0.5rem; /* Reduce horizontal padding */
+                font-size: 0.875rem; /* Slightly smaller font */
+                white-space: normal; /* Allow text to wrap */
+            }
+            .data-table th:first-child, .data-table td:first-child {
+                padding-left: 0.75rem;
+            }
+            .data-table th:last-child, .data-table td:last-child {
+                padding-right: 0.75rem;
+            }
+            /* Keep important columns from wrapping if possible */
+            .data-table td:last-child { /* Actions column */
+                white-space: nowrap;
+                width: 1%;
+            }
+            
+            /* Make stat cards smaller on mobile */
+            .stats-grid {
+                 grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                 gap: 1rem;
+            }
+            .stat-number {
+                font-size: 1.75rem;
+            }
+            .stat-number svg {
+                 font-size: 20px !important; /* Adjust icon in stat number */
+                 margin-bottom: 4px !important;
+            }
+
+            /* Adjust card padding on mobile */
+            .card {
+                padding: 1rem;
+            }
+            .modal-content {
+                padding: 1.5rem;
+            }
+            .dashboard__main {
+                padding: 1rem; /* Reduce main padding on mobile */
+            }
+            .mobile-header {
+                 margin: -1rem -1rem 1rem -1rem; /* Adjust for new padding */
+            }
+        }
 
     `}</style>
 );
@@ -800,7 +869,7 @@ const EditVehicle = ({ vehicle, onClose, onVehicleUpdated }) => {
                                  {vehicle.imageUrl && !newImageFile && (
                                      <small>Current image: {vehicle.imageUrl.split('-').pop()}</small>
                                  )}
-                            </div>
+                             </div>
 
                             <div className="form-group" style={{gridColumn: '1 / -1', alignItems: 'center', flexDirection: 'row', gap: '1rem'}}>
                                 <label className="form-label" htmlFor={`available-${vehicle._id}`}>Available for Renting</label>
@@ -846,27 +915,27 @@ const Orders = ({ bookings, loading, error, onOpenConfirmModal, onOpenCompleteMo
                 <h3 className="sub-title">New Booking Requests</h3>
                 <div className="overflow-auto">
                     {loading ? <div className="loading-container"><Loader2 className="spinner" /></div> :
-                     pendingRequests.length > 0 ? (
-                         <table className="data-table">
-                             <thead><tr><th>Vehicle</th><th>Customer</th><th>Dates</th><th>Total</th><th>Actions</th></tr></thead>
-                             <tbody>
-                                 {pendingRequests.map(req => (
-                                     <tr key={req._id}>
-                                         <td>{req.vehicleId?.name || 'N/A'}</td>
-                                         <td>{req.customerId?.fullName || 'N/A'}</td>
-                                         <td>{new Date(req.startDate).toLocaleDateString()} to {new Date(req.endDate).toLocaleDateString()}</td>
+                      pendingRequests.length > 0 ? (
+                          <table className="data-table">
+                              <thead><tr><th>Vehicle</th><th>Customer</th><th>Dates</th><th>Total</th><th>Actions</th></tr></thead>
+                              <tbody>
+                                  {pendingRequests.map(req => (
+                                      <tr key={req._id}>
+                                          <td>{req.vehicleId?.name || 'N/A'}</td>
+                                          <td>{req.customerId?.fullName || 'N/A'}</td>
+                                          <td>{new Date(req.startDate).toLocaleDateString()} to {new Date(req.endDate).toLocaleDateString()}</td>
                                           <td>₹{req.totalPrice?.toLocaleString('en-IN') || 0}</td>
-                                         <td>
-                                             <div className="button-group-sm">
-                                                 <button className="btn btn-success btn-sm" onClick={() => onOpenConfirmModal(req)}><Check size={16}/> Accept</button>
-                                                 <button className="btn btn-danger btn-sm" onClick={() => onRejectBooking(req._id)}><X size={16}/> Reject</button>
-                                             </div>
-                                         </td>
-                                     </tr>
-                                 ))}
-                             </tbody>
-                         </table>
-                     ) : (<p style={{textAlign: 'center'}}>No new booking requests.</p>)}
+                                          <td>
+                                               <div className="button-group-sm">
+                                                   <button className="btn btn-success btn-sm" onClick={() => onOpenConfirmModal(req)}><Check size={16}/> Accept</button>
+                                                   <button className="btn btn-danger btn-sm" onClick={() => onRejectBooking(req._id)}><X size={16}/> Reject</button>
+                                               </div>
+                                          </td>
+                                      </tr>
+                                  ))}
+                              </tbody>
+                          </table>
+                      ) : (<p style={{textAlign: 'center'}}>No new booking requests.</p>)}
                 </div>
             </div>
 
@@ -875,27 +944,27 @@ const Orders = ({ bookings, loading, error, onOpenConfirmModal, onOpenCompleteMo
                 <h3 className="sub-title">Confirmed & Upcoming Bookings</h3>
                  <div className="overflow-auto">
                     {loading ? <div className="loading-container"><Loader2 className="spinner" /></div> :
-                     confirmedBookings.length > 0 ? (
-                         <table className="data-table">
-                             <thead><tr><th>Booking ID</th><th>Vehicle</th><th>Customer</th><th>Dates</th><th>Actions</th></tr></thead>
-                             <tbody>
-                                 {confirmedBookings.map(book => (
-                                     <tr key={book._id}>
-                                         <td>{String(book._id).slice(-6)}</td>
-                                         <td>{book.vehicleId?.name || 'N/A'}</td>
-                                         <td>{book.customerId?.fullName || 'N/A'}</td>
-                                         <td>{new Date(book.startDate).toLocaleDateString()} to {new Date(book.endDate).toLocaleDateString()}</td>
-                                         <td>
-                                             {/* FIX: Ensure CheckCircle is imported */}
-                                             <button className="btn btn-primary btn-sm" onClick={() => onOpenCompleteModal(book)}>
-                                                 <CheckCircle size={16} /> Mark as Completed
-                                             </button>
-                                         </td>
-                                     </tr>
-                                 ))}
-                             </tbody>
-                         </table>
-                     ) : (<p style={{textAlign: 'center'}}>No confirmed bookings.</p>)}
+                      confirmedBookings.length > 0 ? (
+                          <table className="data-table">
+                              <thead><tr><th>Booking ID</th><th>Vehicle</th><th>Customer</th><th>Dates</th><th>Actions</th></tr></thead>
+                              <tbody>
+                                  {confirmedBookings.map(book => (
+                                      <tr key={book._id}>
+                                          <td>{String(book._id).slice(-6)}</td>
+                                          <td>{book.vehicleId?.name || 'N/A'}</td>
+                                          <td>{book.customerId?.fullName || 'N/A'}</td>
+                                          <td>{new Date(book.startDate).toLocaleDateString()} to {new Date(book.endDate).toLocaleDateString()}</td>
+                                          <td>
+                                              {/* FIX: Ensure CheckCircle is imported */}
+                                              <button className="btn btn-primary btn-sm" onClick={() => onOpenCompleteModal(book)}>
+                                                  <CheckCircle size={16} /> Mark as Completed
+                                              </button>
+                                          </td>
+                                      </tr>
+                                  ))}
+                              </tbody>
+                          </table>
+                      ) : (<p style={{textAlign: 'center'}}>No confirmed bookings.</p>)}
                 </div>
             </div>
 
@@ -904,23 +973,23 @@ const Orders = ({ bookings, loading, error, onOpenConfirmModal, onOpenCompleteMo
                 <h3 className="sub-title">Booking History (Completed / Cancelled)</h3>
                  <div className="overflow-auto">
                     {loading ? <div className="loading-container"><Loader2 className="spinner" /></div> :
-                     pastBookings.length > 0 ? (
-                         <table className="data-table">
-                             <thead><tr><th>Booking ID</th><th>Vehicle</th><th>Customer</th><th>Dates</th><th>Total</th><th>Status</th></tr></thead>
-                             <tbody>
-                                 {pastBookings.map(book => (
-                                     <tr key={book._id}>
-                                         <td>{String(book._id).slice(-6)}</td>
-                                         <td>{book.vehicleId?.name || 'N/A'}</td>
-                                         <td>{book.customerId?.fullName || 'N/A'}</td>
-                                         <td>{new Date(book.startDate).toLocaleDateString()} to {new Date(book.endDate).toLocaleDateString()}</td>
-                                         <td>₹{book.totalPrice?.toLocaleString('en-IN') || 0}</td>
-                                          <td><span className={`status-chip ${book.status === 'Completed' ? 'status-chip-green' : 'status-chip-red'}`}>{book.status}</span></td>
-                                     </tr>
-                                 ))}
-                             </tbody>
-                         </table>
-                     ) : (<p style={{textAlign: 'center'}}>No past bookings.</p>)}
+                      pastBookings.length > 0 ? (
+                          <table className="data-table">
+                              <thead><tr><th>Booking ID</th><th>Vehicle</th><th>Customer</th><th>Dates</th><th>Total</th><th>Status</th></tr></thead>
+                              <tbody>
+                                  {pastBookings.map(book => (
+                                      <tr key={book._id}>
+                                          <td>{String(book._id).slice(-6)}</td>
+                                          <td>{book.vehicleId?.name || 'N/A'}</td>
+                                          <td>{book.customerId?.fullName || 'N/A'}</td>
+                                          <td>{new Date(book.startDate).toLocaleDateString()} to {new Date(book.endDate).toLocaleDateString()}</td>
+                                          <td>₹{book.totalPrice?.toLocaleString('en-IN') || 0}</td>
+                                           <td><span className={`status-chip ${book.status === 'Completed' ? 'status-chip-green' : 'status-chip-red'}`}>{book.status}</span></td>
+                                      </tr>
+                                  ))}
+                              </tbody>
+                          </table>
+                      ) : (<p style={{textAlign: 'center'}}>No past bookings.</p>)}
                 </div>
             </div>
         </div>
@@ -1039,27 +1108,27 @@ const Notifications = () => {
             {error && <div className="error-message card">{error}</div>}
             {!loading && !error && (
                  notifications.length === 0 ? (
-                      <div className="card" style={{textAlign: 'center'}}><Bell size={48} style={{color: 'var(--gray-400)', margin: '0 auto 1rem'}} /><p>No new notifications.</p></div>
+                     <div className="card" style={{textAlign: 'center'}}><Bell size={48} style={{color: 'var(--gray-400)', margin: '0 auto 1rem'}} /><p>No new notifications.</p></div>
                  ) : (
-                      <ul className="notification-list">
-                          {notifications.map(notif => (
-                              <li key={notif._id} className="notification-item">
-                                  <div className="notification-icon"><Bell size={20} /></div>
-                                  <div className="notification-content">
-                                      <p className="notification-message">{notif.message}</p>
-                                      <p className="notification-time">{formatTimeAgo(notif.createdAt)}</p>
-                                  </div>
-                                  {/* Delete Button */}
-                                  <button
+                     <ul className="notification-list">
+                         {notifications.map(notif => (
+                             <li key={notif._id} className="notification-item">
+                                 <div className="notification-icon"><Bell size={20} /></div>
+                                 <div className="notification-content">
+                                     <p className="notification-message">{notif.message}</p>
+                                     <p className="notification-time">{formatTimeAgo(notif.createdAt)}</p>
+                                 </div>
+                                 {/* Delete Button */}
+                                 <button
                                      onClick={() => handleDeleteNotification(notif._id)}
                                      className="notification-delete-btn"
                                      title="Delete Notification"
-                                  >
-                                      <Trash2 size={18} />
-                                  </button>
-                              </li>
-                          ))}
-                      </ul>
+                                 >
+                                     <Trash2 size={18} />
+                                 </button>
+                             </li>
+                         ))}
+                     </ul>
                  )
             )}
         </div>
@@ -1455,7 +1524,7 @@ const OwnerSettings = () => {
                              <label className="form-label" htmlFor="ownerEmail">Email Address</label>
                              <input id="ownerEmail" type="email" value={profile.email} className="form-input" readOnly/>
                          </div>
-                          <div className="form-group">
+                           <div className="form-group">
                              <label className="form-label" htmlFor="ownerPhone">Phone Number</label>
                              <input id="ownerPhone" type="tel" value={profile.phone} onChange={e => setProfile({...profile, phone: e.target.value})} className="form-input"/>
                          </div>
@@ -1551,7 +1620,7 @@ function OwnerDashboard() {
             if (isMobileView && isSidebarOpen && sidebarRef.current && !sidebarRef.current.contains(event.target)) {
                  const mobileToggle = document.querySelector('.mobile-menu-btn');
                  if (!mobileToggle || !mobileToggle.contains(event.target)) {
-                     setIsSidebarOpen(false);
+                      setIsSidebarOpen(false);
                  }
             }
         };
@@ -1601,10 +1670,10 @@ function OwnerDashboard() {
     };
 
     const handleTabClick = (tabName) => {
-        setActiveTab(tabName);
-        if (isMobileView) {
-            setIsSidebarOpen(false); // Close sidebar on mobile after click
-        }
+         setActiveTab(tabName);
+         if (isMobileView) {
+             setIsSidebarOpen(false); // Close sidebar on mobile after click
+         }
     };
 
     // --- Modal Handlers ---
@@ -1848,19 +1917,19 @@ const ConfirmBookingModal = ({ booking, onClose, onBookingConfirmed }) => {
                              )}
                          </label>
                          <small>Use your phone to record a live video (`capture="environment"`).</small>
-                    </div>
+                     </div>
 
-                    <div className="form-actions">
+                     <div className="form-actions">
                          <button type="button" className="btn btn-secondary" onClick={onClose} disabled={loading}>
                              Cancel
                          </button>
                          <button type="submit" className="btn btn-success" disabled={loading || !videoFile}>
                              {loading ? <Loader2 className="spinner" size={16} /> : <><Check size={16} /> Confirm Booking</>}
                          </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                     </div>
+                 </form>
+             </div>
+         </div>
     );
 };
 
@@ -1967,7 +2036,7 @@ const DamageReportModal = ({ booking, onClose, onReportSubmitted }) => {
                             {damageVideoFile ? (
                                 <span className="file-name">{damageVideoFile.name}</span>
                             ) : (
-                            <span>Click to Record/Upload Damage Video</span>
+                                <span>Click to Record/Upload Damage Video</span>
                             )}
                         </label>
                     </div>
@@ -1999,4 +2068,4 @@ const DamageReportModal = ({ booking, onClose, onReportSubmitted }) => {
 };
 
 
-export default OwnerDashboard;
+export default OwnerDashboard;  

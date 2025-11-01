@@ -212,6 +212,13 @@ const CustomerLoginStyles = () => (
             .customer-login-card .logo {
                 font-size: 2rem;
             }
+            
+            /* --- MODIFICATION: Make footer links stack on mobile --- */
+            .customer-login-card .form-links {
+                flex-direction: column;
+                gap: 1.25rem;
+                align-items: center; /* Center-align the stacked links */
+            }
         }
     `}</style>
 );
